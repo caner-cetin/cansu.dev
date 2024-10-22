@@ -45,15 +45,12 @@
 ### available packages
 
 - python
-  - python2 and 3
   - mlxtend
   - numpy
   - pandas
   - scikit-learn
   - pytest
   - scipy
-
-wip
 
 ### notes
 
@@ -62,3 +59,6 @@ wip
 ## troubleshooting
 - if initial code example does not display upon selecting a language, try selecting another language and coming back to the desired language. 
 - ruby is bugged. try hard resetting page with Cmd + Shift + R or Ctrl + Shift + R if page gets bricked after selecting ruby.
+
+## contact
+mail [hello@cansu.dev](mailto:hello@cansu.dev) for any questions or suggestions.
