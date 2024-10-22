@@ -76,7 +76,6 @@ import 'ace-builds/src-noconflict/ext-settings_menu'
 import 'ace-builds/src-min-noconflict/ext-searchbox'
 import 'ace-builds/src-noconflict/ext-statusbar'
 
-import { useKindeAuth } from '@kinde-oss/kinde-auth-react'
 import { createFileRoute } from '@tanstack/react-router'
 import React, { useEffect, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
@@ -128,9 +127,6 @@ export default function MainPage() {
   const [sourceCode, setSourceCode] = useState<string | null>(null)
   const [readme, setReadme] = useState<string | null>(null)
   const code = useRef<AceEditor | null>(null)
-  const { login, register, logout } = useKindeAuth()
-  const auth = useKindeAuth()
-  const user = auth.user
   const JudgeAPI = useJudge()
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <we do not need to re-render upon language ID change>
@@ -221,14 +217,10 @@ export default function MainPage() {
       <CustomToast />
       <Header
         code={code}
-        user={user}
         languages={JudgeAPI.languages.data ?? []}
         languageID={languageID}
         displayingSharedCode={false}
         setLanguageID={setLanguageID}
-        onLogin={login}
-        onSignup={register}
-        onLogout={logout}
         onSubmit={() =>
           Submissions.handleSubmitCode(
             code.current,

@@ -1,6 +1,6 @@
 // i am going to pile up everything in file and you cannot stop me
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 
 export type CodeStorage = Record<string, string | undefined>;
 export enum Settings {

@@ -4,7 +4,6 @@ import './index.css'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { routeTree } from './routeTree.gen'
 import { createRouter, RouterProvider } from '@tanstack/react-router'
-import { KindeProvider } from "@kinde-oss/kinde-auth-react";
 
 const queryClient = new QueryClient()
 
@@ -19,14 +18,7 @@ declare module '@tanstack/react-router' {
 }
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <KindeProvider
-    clientId={import.meta.env.VITE_KINDE_CLIENT_ID}
-    domain={import.meta.env.VITE_KINDE_DOMAIN}
-    redirectUri={import.meta.env.VITE_KINDE_REDIRECT_URI}
-    logoutUri={import.meta.env.VITE_KINDE_LOGOUT_URI}
-  >
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>
-  </KindeProvider>
+  <QueryClientProvider client={queryClient}>
+    <RouterProvider router={router} />
+  </QueryClientProvider>
 )

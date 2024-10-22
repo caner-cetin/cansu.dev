@@ -16,7 +16,7 @@ interface SettingsModalProps {
 }
 
 
-export default function SettingsModal({ code, languageID, setLanguageID, show, onHide }: SettingsModalProps) {
+export default function SettingsModal({ code, languageID, show, onHide }: SettingsModalProps) {
   const [colorTheme, setColorTheme] = useColorTheme();
   const [oldColorTheme, setOldColorTheme] = useState(colorTheme)
   const [renderFirst, setRenderFirst] = useRenderFirst()

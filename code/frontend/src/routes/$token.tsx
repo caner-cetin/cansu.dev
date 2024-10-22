@@ -1,4 +1,3 @@
-import { useKindeAuth } from '@kinde-oss/kinde-auth-react'
 import { createFileRoute } from '@tanstack/react-router'
 import React, { useEffect, useRef, useState } from 'react'
 import AceEditor from 'react-ace'
@@ -42,11 +41,8 @@ export default function SharedCodePage() {
       </div>
     )
   }
-  const { login, register, logout } = useKindeAuth()
   const [colorTheme] = useColorTheme()
   const code = useRef<AceEditor | null>(null)
-  const auth = useKindeAuth()
-  const user = auth.user
   const JudgeAPI = useJudge()
 
   const query = useQuery({
@@ -93,13 +89,9 @@ export default function SharedCodePage() {
       <CustomToast />
       <Header
         code={code}
-        user={user}
         languages={JudgeAPI.languages.data ?? []}
         displayingSharedCode={true}
         languageID={query.data?.language_id || LanguageId.Python3}
-        onLogin={login}
-        onSignup={register}
-        onLogout={logout}
       />
       <PanelGroup direction="horizontal" className="flex-1">
         <Panel defaultSize={70} minSize={30}>
