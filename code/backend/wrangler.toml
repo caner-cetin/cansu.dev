@@ -1,0 +1,19 @@
+name = "code-cansu-dev-backend"
+main = "src/index.ts"
+compatibility_date = "2024-10-21"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+JUDGE0_BASE_API_URL = "https://judge.cansu.dev"
+JUDGE0_AUTHZ_HEADER = "X-Auth-User"
+JUDGE0_AUTHN_HEADER = "X-Auth-Token"
+
+[observability]
+enabled = true
+head_sampling_rate = 1
+
+[[unsafe.bindings]]
+name = "CODE_RATE_LIMITER"
+type = "ratelimit"
+namespace_id = "1661"
+simple = { limit = 40, period = 60 }

@@ -1,0 +1,33 @@
+name: cansu-dev-judge
+x-logging:
+  &default-logging
+  logging:
+    driver: json-file
+    options:
+      max-size: 100M
+services:
+  judgezero:
+      image: judge0/judge0:1.13.1
+      volumes:
+        - ~/deployment/cansu.dev/judge0.conf:/judge0.conf:ro
+      ports:
+        - "2358:2358"
+      privileged: true
+      restart: always
+      networks:
+        - cansu_dev_code_judge0_bridge
+      <<: *default-logging
+  workers:
+    image: judge0/judge0:1.13.1
+    command: ["./scripts/workers"]
+    volumes:
+      - ~/deployment/cansu.dev/judge0.conf:/judge0.conf:ro
+    privileged: true
+    restart: always
+    networks:
+      - cansu_dev_code_judge0_bridge
+    <<: *default-logging
+
+networks:
+  cansu_dev_code_judge0_bridge:
+    external: true
