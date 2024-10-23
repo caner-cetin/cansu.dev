@@ -1,6 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
 import React, { useEffect, useRef, useState } from 'react'
-import AceEditor from 'react-ace'
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels'
 import CustomToast from 'src/components/CustomToast'
 import { initializeAce } from 'src/editor/config'
@@ -8,6 +7,7 @@ import { LANGUAGE_CONFIG } from 'src/editor/languages'
 import { getSubmission, useJudge } from 'src/hooks/useJudge'
 import Header from '../components/Header'
 import OutputModal from '../components/OutputModal'
+import AceEditor from 'react-ace'
 import 'ace-builds/src-noconflict/ext-language_tools'
 import 'ace-builds/src-noconflict/ext-code_lens'
 import 'ace-builds/src-noconflict/ext-error_marker'
@@ -25,6 +25,7 @@ export const Route = createFileRoute('/$token')({
 export default function SharedCodePage() {
   const { token } = Route.useParams()
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768)
+  const codeArea = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768)
@@ -104,7 +105,7 @@ export default function SharedCodePage() {
               backgroundColor: '#1e1e1e',
             }}
           >
-            <div style={{ flex: 1, position: 'relative' }}>
+            <div style={{ flex: 1, position: 'relative' }} ref={codeArea}>
               <AceEditor
                 mode="python"
                 ref={code}

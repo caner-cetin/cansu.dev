@@ -10,7 +10,7 @@ const ShareButton = (props: ShareButtonProp) => {
   const [isOpen, setIsOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const popoverRef = useRef<HTMLDivElement>(null);
-  const shareUrl = `${window.location.href}/share/${props.token}`;
+  const shareUrl = `${window.location.href}/${props.token}`;
 
   const handleCopy = async () => {
     try {

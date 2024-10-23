@@ -3,22 +3,17 @@ import type AceEditor from "react-ace";
 import { config } from "ace-builds";
 import { type CodeStorage, Settings } from "src/services/settings";
 import { LANGUAGE_CONFIG } from "./languages";
-import ace from "ace-builds";
 
 config.set(
 	"basePath",
 	"https://cdn.jsdelivr.net/npm/ace-builds@1.4.8/src-noconflict/",
 );
-export const configureAce = () => {
-	ace.require("ace/ext/language_tools");
-};
 
 export const initializeAce = (
 	code: React.MutableRefObject<AceEditor | null>,
 	colorTheme: string,
 	languageID: number,
 ) => {
-	configureAce();
 	code.current?.editor?.setTheme(`ace/theme/${colorTheme}`);
 	code.current?.editor?.session.setMode(
 		`ace/mode/${LANGUAGE_CONFIG[languageID]?.mode}`,

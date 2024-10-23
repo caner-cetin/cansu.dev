@@ -8,7 +8,7 @@ import { ColorThemeDropdown } from './ColorThemeDropdown';
 import { RenderFirstDropdown } from './RenderFirstDropdown';
 
 interface SettingsModalProps {
-  code: React.MutableRefObject<AceEditor | null>;
+  code: (React.MutableRefObject<AceEditor | null>) | undefined;
   languageID: number;
   setLanguageID: React.Dispatch<React.SetStateAction<number>> | undefined;
   show: boolean;
@@ -25,11 +25,13 @@ export default function SettingsModal({ code, languageID, show, onHide }: Settin
   useEffect(() => {
     if (oldColorTheme !== colorTheme) {
       setOldColorTheme(colorTheme)
-      if (!code.current) {
-        initializeAce(code, colorTheme, languageID);
+      if (code) {
+        if (!code.current) {
+          initializeAce(code, colorTheme, languageID);
+        }
+        code.current?.editor?.setTheme(`ace/theme/${colorTheme}`);
+        localStorage.setItem(Settings.COLOR_THEME, colorTheme);
       }
-      code.current?.editor?.setTheme(`ace/theme/${colorTheme}`);
-      localStorage.setItem(Settings.COLOR_THEME, colorTheme);
     }
   }, [colorTheme])
 
