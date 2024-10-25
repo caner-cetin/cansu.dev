@@ -1,5 +1,4 @@
 import { Mail, Github, Eye } from 'lucide-react';
-
 const Resume = () => {
   const skills = [
     { id: 1, icon: "devicon-typescript-plain", text: "TypeScript" },

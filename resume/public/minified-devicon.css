@@ -1,0 +1,32 @@
+@font-face {
+    font-family: "devicon";
+    src: url("fonts/MinifiedDevicon.woff2") format("woff2");
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
+}
+[class^="devicon-"],
+[class*=" devicon-"] {
+    font-family: 'devicon' !important;
+    speak: never;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.devicon-typescript-plain:before { content: "\EC63"; }
+.devicon-react-original:before { content: "\EBBC"; }
+.devicon-python-plain:before { content: "\EB9C"; }
+.devicon-go-original-wordmark:before { content: "\EA3D"; }
+.devicon-kotlin-plain:before { content: "\EAB5"; }
+.devicon-dotnetcore-plain:before { content: "\E9CA"; }
+.devicon-docker-plain:before { content: "\E9C3"; }
+.devicon-postgresql-plain:before { content: "\EB79"; }
+.devicon-mongodb-plain:before { content: "\EAF5"; }
+.devicon-sqlite-plain:before { content: "\EC1E"; }
+.devicon-git-plain:before { content: "\EA2D"; }
+.devicon-amazonwebservices-original:before { content: "\E90C"; }
