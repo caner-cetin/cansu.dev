@@ -3,6 +3,13 @@
 @import 'tailwindcss/utilities';
 @import 'bootstrap/dist/css/bootstrap.min.css';
 @import "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css";
+
+
+@font-face {
+  font-family: "CommitMono";
+  src: url("/fonts/CommitMono-400-Regular.otf") format("opentype");
+  font-weight: 400;
+}
 .crt::after {
   content: " ";
   display: block;

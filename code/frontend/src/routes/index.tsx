@@ -302,7 +302,7 @@ export default function MainPage() {
                     showLineNumbers: true,
                     tabSize: 2,
                   }}
-                  style={{ width: '100%', height: '100%' }}
+                  style={{ width: '100%', height: '100%', fontFamily: 'CommitMono' }}
                 />
               </div>
             </div>
