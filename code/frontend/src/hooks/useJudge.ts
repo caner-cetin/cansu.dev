@@ -57,7 +57,7 @@ export type GetSubmissionResponse = {
 		id: number;
 		name: string;
 	};
-}
+};
 
 const getHealth = () =>
 	api.get<HealthResponse>("/judge/health").then((res) => res.data);
@@ -82,11 +82,14 @@ const submitStdin = (opts: submitStdinOpts) =>
 		.then((res) => res.data);
 
 type SubmitSubmissionOpts = {
-	id: number, languageId: number
-}
+	id: number;
+	languageId: number;
+};
 const submitSubmission = (opts: SubmitSubmissionOpts) =>
 	api
-		.put<GetSubmissionResponse>(`/judge/submit/${opts.id}?language=${opts.languageId}`)
+		.put<GetSubmissionResponse>(
+			`/judge/submit/${opts.id}?language=${opts.languageId}`,
+		)
 		.then((res) => res.data);
 
 export interface JudgeAPISpec {

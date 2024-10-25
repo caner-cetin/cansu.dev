@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.pixel-border {
+  box-shadow: 
+    -4px 0 0 0 #272744,
+    4px 0 0 0 #272744,
+    0 -4px 0 0 #272744,
+    0 4px 0 0 #272744;
+}
+
+.pixel-text {
+  text-shadow: 2px 2px 0 #272744;
+}
+
+.glow-text {
+  text-shadow: 
+    0 0 10px #f2d3ab,
+    2px 2px 0 #272744;
+}
+
+.hover-float {
+  transition: transform 0.2s;
+}
+
+.hover-float:hover {
+  transform: translateY(-2px);
+}
+
+.hover-section {
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.hover-section:hover {
+  transform: translateY(-4px);
+  box-shadow: 
+    -4px 0 0 0 #272744,
+    4px 0 0 0 #272744,
+    0 -4px 0 0 #272744,
+    0 8px 0 0 #272744;
+}
+
+@keyframes float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+  100% { transform: translateY(0); }
+}

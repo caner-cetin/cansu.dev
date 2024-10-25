@@ -9,6 +9,7 @@ import dayjs from "dayjs";
 import { HTTPException } from "hono/http-exception";
 import { createDB } from "./db";
 import { cloudflareRateLimiter } from "@hono-rate-limiter/cloudflare";
+import { LanguagesResponse } from "./schemas";
 export type Bindings = {
 	DATABASE_URL: string;
 	JWT_SECRET: string;
@@ -51,10 +52,14 @@ app.get("/health", async (c) => {
 	return c.json(health);
 });
 
-app.get("/judge/languages", async (c) => {
-	const languages = await Judge0.Language.getAll(c);
-	return c.json(languages);
-});
+app.get(
+	"/judge/languages",
+	zValidator("json", LanguagesResponse),
+	async (c) => {
+		const languages = await Judge0.Language.getAll(c);
+		return c.json(languages);
+	},
+);
 
 app.post("/judge/submit/code", async (c) => {
 	const code = await c.req.text();
@@ -148,6 +153,7 @@ app.onError((err, c) => {
 		status,
 	);
 });
+export type AppType = typeof app;
 
 // Start the worker
 export default app;

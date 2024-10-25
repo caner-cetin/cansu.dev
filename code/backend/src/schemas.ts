@@ -1,6 +1,5 @@
-import { z } from 'zod';
-// Schema definitions, these are not used, but should be a good reference point for responses.
-const HealthResponse = z.array(
+import { z } from "zod";
+export const HealthResponse = z.array(
 	z.object({
 		queue: z.string(),
 		size: z.number(),
@@ -12,16 +11,16 @@ const HealthResponse = z.array(
 	}),
 );
 
-const LanguagesResponse = z.array(
+export const LanguagesResponse = z.array(
 	z.object({
 		id: z.number(),
 		name: z.string(),
 	}),
 );
 
-const SubmitCodeResponse = z.object({ id: z.number() });
+export const SubmitCodeResponse = z.object({ id: z.number() });
 
-const GetSubmissionResponse = z.object({
+export const GetSubmissionResponse = z.object({
 	source_code: z.string(),
 	language_id: z.number(),
 	stdin: z.string(),
@@ -54,6 +53,6 @@ const GetSubmissionResponse = z.object({
 	}),
 });
 
-const CreateSubmissionResponse = z.object({
+export const CreateSubmissionResponse = z.object({
 	token: z.string(),
 });
