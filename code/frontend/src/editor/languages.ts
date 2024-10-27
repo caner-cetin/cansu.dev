@@ -1060,11 +1060,17 @@ macro_rules! mac_variant {
 		iconClass: "devicon-swift-plain",
 	},
 	84: {
-		extensionModule: () => import("ace-builds/src-noconflict/mode-typescript"),
-		defaultText: `console.log("deniz abi kornaya bas")`,
-		runnerName: "TypeScript (Bun 1.1.33)",
-		mode: "typescript",
-		iconClass: "devicon-typescript-plain",
+		extensionModule: () => import("ace-builds/src-noconflict/mode-text"),
+		defaultText: `Imports System
+
+Public Module Hello
+   Public Sub Main(  )
+      Console.WriteLine("hello, world")
+   End Sub
+End Module`,
+		runnerName: "Visual Basic.Net (vbnc 0.0.0.5943)",
+		mode: "text",
+		iconClass: "devicon-visualbasic-plain",
 	},
 	90: {
 		//  C (GCC 13.3)
