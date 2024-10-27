@@ -1060,4 +1060,28 @@ macro_rules! mac_variant {
 		mode: "typescript",
 		iconClass: "devicon-typescript-plain",
 	},
+	90: {
+		//  C (GCC 13.3)
+		extensionModule: () => import("ace-builds/src-noconflict/mode-c_cpp"),
+		defaultText: `#include <stdio.h>
+int main() {
+    printf("deniz abi kornaya bas");
+    return 0;
+}`,
+		runnerName: "C (GCC 13.3)",
+		mode: "c_cpp",
+		iconClass: "devicon-c-line",
+	},
+	91: {
+		// C++ (GCC 13.3)
+		extensionModule: () => import("ace-builds/src-noconflict/mode-c_cpp"),
+		defaultText: `#include <iostream>
+int main() {
+    std::cout << "deniz abi kornaya bas";
+    return 0;
+}`,
+		runnerName: "C++ (GCC 13.3)",
+		mode: "c_cpp",
+		iconClass: "devicon-cplusplus-plain",
+	},
 };
