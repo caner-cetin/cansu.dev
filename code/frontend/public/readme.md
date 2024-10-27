@@ -4,7 +4,6 @@
 
 - Assembly (NASM)
 - Bash
-- Basic
 - C (Clang)
 - C++ (Clang)
 - C (GCC)
@@ -16,7 +15,7 @@
 - D
 - Elixir
 - Erlang
-- F#
+- Nim
 - Fortran
 - Go
 - Groovy
@@ -44,21 +43,41 @@
 
 ### available packages
 
-- python
-  - mlxtend
-  - numpy
-  - pandas
-  - scikit-learn
-  - pytest
-  - scipy
+wip
 
 ### notes
 
-- Basic and Octave has no modes, so they are rendered as plain text.
+- Octave has no modes, so it is rendered as plain text.
 
 ## troubleshooting
 - if initial code example does not display upon selecting a language, try selecting another language and coming back to the desired language. 
-- ruby is bugged. try hard resetting page with Cmd + Shift + R or Ctrl + Shift + R if page gets bricked after selecting ruby.
 
 ## contact
-mail [hello@cansu.dev](mailto:hello@cansu.dev) for any questions or suggestions.
+mail [hello@cansu.dev](mailto:hello@cansu.dev) for all feedbacks, questions, suggestions, anything.
+
+## changelog
+### 2024-10-27
+#### added
+- GCC compiler versions:
+  - GCC 10.x
+  - GCC 11.x
+  - GCC 12.x
+  - GCC 13.x
+  - Planned: GCC 3.x, 7.x, 8.x, 9.x, 14.x
+
+- Language Support:
+  - Nim
+  - Bun runtime for JavaScript/TypeScript
+
+#### changed
+- JavaScript/TypeScript Runtime Environment:
+  - Replaced Node.js with Bun as primary runtime
+  - Planned: Support for multiple runtimes (Deno, Node.js, Bun)
+
+#### updated
+- All compilers, interpreters, and runtimes updated to latest stable versions
+
+#### removed
+- F# (due to excessive file size needed for compiling)
+- BASIC
+

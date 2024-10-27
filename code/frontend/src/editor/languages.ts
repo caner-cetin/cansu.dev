@@ -101,7 +101,7 @@ module Mankala {
        }
    }
 }`,
-		runnerName: "TypeScript (3.7.4)",
+		runnerName: "TypeScript (Bun 1.1.33)",
 		mode: "typescript",
 		iconClass: "devicon-typescript-plain",
 	},
@@ -121,7 +121,7 @@ _start:
 section .data
 msg db 'deniz abi kornaya bas', 0xa
 len equ $ - msg`,
-		runnerName: "Assembly (NASM 2.14.02)",
+		runnerName: "Assembly (NASM 2.16.03)",
 		mode: "assembly_x86",
 		iconClass: "devicon-wasm-original",
 	},
@@ -132,34 +132,34 @@ len equ $ - msg`,
 		mode: "sh",
 		iconClass: "devicon-bash-plain",
 	},
-	47: {
-		extensionModule: () => Promise.resolve(),
-		defaultText: `PRINT "deniz abi kornaya bas"`,
-		runnerName: "Basic (FBC 1.07.1)",
-		mode: "text",
-		iconClass: "devicon-visualbasic-plain",
-	},
+	// 47: {
+	// 	extensionModule: () => Promise.resolve(),
+	// 	defaultText: `PRINT "deniz abi kornaya bas"`,
+	// 	runnerName: "Basic (FBC 1.07.1)",
+	// 	mode: "text",
+	// 	iconClass: "devicon-visualbasic-plain",
+	// },
 	75: {
-		// C (Clang 7.0.1)
+		// C (Clang 19.1.0)
 		extensionModule: () => import("ace-builds/src-noconflict/mode-c_cpp"),
 		defaultText: `#include <stdio.h>
 int main() {
     printf("deniz abi kornaya bas");
     return 0;
 }`,
-		runnerName: "C (Clang 7.0.1)",
+		runnerName: "C (Clang 19.1.0)",
 		mode: "c_cpp",
 		iconClass: "devicon-c-line",
 	},
 	76: {
-		// C++ (Clang 7.0.1)
+		// C++ (Clang 19.1.0)
 		extensionModule: () => import("ace-builds/src-noconflict/mode-c_cpp"),
 		defaultText: `#include <iostream>
 int main() {
     std::cout << "deniz abi kornaya bas";
     return 0;
 }`,
-		runnerName: "C++ (Clang 7.0.1)",
+		runnerName: "C++ (Clang 19.1.0)",
 		mode: "c_cpp",
 		iconClass: "devicon-cplusplus-plain",
 	},
@@ -176,67 +176,63 @@ int main() {
 		iconClass: "devicon-c-line",
 	},
 	52: {
-		// C++ (GCC 7.4.0)
+		// C++ (GCC 10.2)
 		extensionModule: () => import("ace-builds/src-noconflict/mode-c_cpp"),
 		defaultText: `#include <iostream>
 int main() {
     std::cout << "deniz abi kornaya bas";
     return 0;
 }`,
-		runnerName: "C++ (GCC 7.4.0)",
+		runnerName: "C++ (GCC 10.2)",
 		mode: "c_cpp",
 		iconClass: "devicon-cplusplus-plain",
 	},
 	49: {
-		// C (GCC 8.3.0)
+		// C (GCC 11.5)
 		extensionModule: () => import("ace-builds/src-noconflict/mode-c_cpp"),
 		defaultText: `#include <stdio.h>
 int main() {
     printf("deniz abi kornaya bas");
     return 0;
 }`,
-		runnerName: "C (GCC 8.3.0)",
+		runnerName: "C (GCC 11.5)",
 		mode: "c_cpp",
 		iconClass: "devicon-c-line",
 	},
 	53: {
-		// C++ (GCC 8.3.0)
 		extensionModule: () => import("ace-builds/src-noconflict/mode-c_cpp"),
 		defaultText: `#include <iostream>
 int main() {
     std::cout << "deniz abi kornaya bas";
     return 0;
 }`,
-		runnerName: "C++ (GCC 8.3.0)",
+		runnerName: "C++ (GCC 11.5)",
 		mode: "c_cpp",
 		iconClass: "devicon-cplusplus-plain",
 	},
 	50: {
-		// C (GCC 9.2.0)
 		extensionModule: () => import("ace-builds/src-noconflict/mode-c_cpp"),
 		defaultText: `#include <stdio.h>
 int main() {
     printf("deniz abi kornaya bas");
     return 0;
 }`,
-		runnerName: "C (GCC 9.2.0)",
+		runnerName: "C (GCC 12.4)",
 		mode: "c_cpp",
 		iconClass: "devicon-c-line",
 	},
 	54: {
-		// C++ (GCC 9.2.0)
 		extensionModule: () => import("ace-builds/src-noconflict/mode-c_cpp"),
 		defaultText: `#include <iostream>
 int main() {
     std::cout << "deniz abi kornaya bas";
     return 0;
 }`,
-		runnerName: "C++ (GCC 9.2.0)",
+		runnerName: "C++ (GCC 12.4)",
 		mode: "c_cpp",
 		iconClass: "devicon-cplusplus-plain",
 	},
 	86: {
-		// Clojure (1.10.1)
 		extensionModule: () => import("ace-builds/src-noconflict/mode-clojure"),
 		defaultText: `(defn parting
   "returns a String parting in a given language"
@@ -260,12 +256,11 @@ int main() {
 (print (re-matches #"abc(.*)
             (r)" "abcxyz
             r") )`,
-		runnerName: "Clojure (1.10.1)",
+		runnerName: "Clojure (1.11.2)",
 		mode: "clojure",
 		iconClass: "devicon-clojure-line",
 	},
 	77: {
-		// COBOL (GnuCOBOL 2.2)
 		extensionModule: () => import("ace-builds/src-noconflict/mode-cobol"),
 		defaultText: `*> ***************************************************************
        *> Purpose:   Say hello to GNU Cobol
@@ -309,12 +304,11 @@ int main() {
        end program bigworld.
 
     `,
-		runnerName: "COBOL (GnuCOBOL 2.2)",
+		runnerName: "COBOL (GnuCOBOL 3.1.2)",
 		mode: "cobol",
 		iconClass: undefined,
 	},
 	55: {
-		// Common Lisp (SBCL 2.0.0)
 		extensionModule: () => import("ace-builds/src-noconflict/mode-lisp"),
 		defaultText: `(defun whitespacep (char)
   "Checks if the given character is a whitespace character."
@@ -356,12 +350,11 @@ int main() {
     (force-output)))  ; Ensure this output is also flushed
 
 (prompt-for-cd)`,
-		runnerName: "Common Lisp (SBCL 2.0.0)",
+		runnerName: "Common Lisp (SBCL 2.4.9)",
 		mode: "lisp",
 		iconClass: undefined,
 	},
 	56: {
-		// D (DMD 2.089.1)
 		extensionModule: () => import("ace-builds/src-noconflict/mode-d"),
 		defaultText: `#!/usr/bin/env rdmd
 // Computes average line length for standard input.
@@ -378,20 +371,18 @@ void main() {
         lines ? sumLength / lines : 0);
 }
 }`,
-		runnerName: "D (DMD 2.089.1)",
+		runnerName: "D (DMD 2.109.1)",
 		mode: "d",
 		iconClass: undefined,
 	},
 	57: {
-		// Elixir (1.9.4)
 		extensionModule: () => import("ace-builds/src-noconflict/mode-elixir"),
 		defaultText: `IO.puts "deniz abi kornaya bas"`,
-		runnerName: "Elixir (1.9.4)",
+		runnerName: "Elixir (1.17.3)",
 		mode: "elixir",
 		iconClass: "devicon-elixir-plain",
 	},
 	58: {
-		// Erlang (OTP 22.2)
 		extensionModule: () => import("ace-builds/src-noconflict/mode-erlang"),
 		defaultText: `-module(word_counter).
 -export([main/1]).
@@ -434,12 +425,11 @@ word_frequency(Words) ->
         maps:put(W, Map + 1, Acc)   % Use maps to store frequency
     end, maps:new(), Words).
 `,
-		runnerName: "Erlang (OTP 22.2)",
+		runnerName: "Erlang (OTP 27.1.2)",
 		mode: "erlang",
 		iconClass: "devicon-erlang-plain",
 	},
 	87: {
-		// Nim (2.2.0)
 		extensionModule: () => import("ace-builds/src-noconflict/mode-nim"),
 		defaultText: `from math import sqrt
 import strformat
@@ -495,12 +485,11 @@ for (n, s) in oddAbundant(1_000_000_000):
     echo fmt"The first odd abundant number greater than 1000000000 is {n}."
     echo fmt"The sum of its proper divisors is {s}."
     break`,
-		runnerName: "F# (.NET Core SDK 3.1.202)",
-		mode: "fsharp",
-		iconClass: "devicon-fsharp-plain",
+		runnerName: "Nim (2.2.0)",
+		mode: "nim",
+		iconClass: "devicon-nim-plain",
 	},
 	59: {
-		// Fortran (GFortran 9.2.0)
 		extensionModule: () => import("ace-builds/src-noconflict/mode-fortran"),
 		defaultText: `program main
     implicit none
@@ -538,32 +527,29 @@ for (n, s) in oddAbundant(1_000_000_000):
     return
 end program main
 `,
-		runnerName: "Fortran (GFortran 9.2.0)",
+		runnerName: "Fortran (GFortran 13.3)",
 		mode: "fortran",
 		iconClass: "devicon-fortran-original",
 	},
 	60: {
-		// Go (1.13.5)
 		extensionModule: () => import("ace-builds/src-noconflict/mode-golang"),
 		defaultText: `package main
 import "fmt"
 func main() {
     fmt.Println("deniz abi kornaya bas")
 }`,
-		runnerName: "Go (1.13.5)",
+		runnerName: "Go (1.23.2)",
 		mode: "golang",
 		iconClass: "devicon-go-original-wordmark",
 	},
 	88: {
-		// Groovy (3.0.3)
 		extensionModule: () => import("ace-builds/src-noconflict/mode-groovy"),
 		defaultText: `println "deniz abi kornaya bas"`,
-		runnerName: "Groovy (3.0.3)",
+		runnerName: "Groovy (4.0.23)",
 		mode: "groovy",
 		iconClass: "devicon-groovy-plain",
 	},
 	61: {
-		// Haskell (GHC 8.8.1)
 		extensionModule: () => import("ace-builds/src-noconflict/mode-haskell"),
 		defaultText: `-- Type annotation (optional)
 fib :: Int -> Integer
@@ -593,42 +579,38 @@ main :: IO ()
 main = do
     putStrLn "Fibonacci numbers:"
     print [fib n | n <- [0..10]]  -- Print the first 10 Fibonacci numbers`,
-		runnerName: "Haskell (GHC 8.8.1)",
+		runnerName: "Haskell (7.8.4)",
 		mode: "haskell",
 		iconClass: "devicon-haskell-plain",
 	},
 	62: {
-		// Java (OpenJDK 13.0.1)
 		extensionModule: () => import("ace-builds/src-noconflict/mode-java"),
 		defaultText: `public class Main {
     public static void main(String[] args) {
         System.out.println("deniz abi kornaya bas");
     }
 }`,
-		runnerName: "Java (OpenJDK 13.0.1)",
+		runnerName: "Java (OpenJDK 23)",
 		mode: "java",
 		iconClass: "devicon-java-plain",
 	},
 	63: {
-		// JavaScript (Node.js 12.14.0)
 		extensionModule: () => import("ace-builds/src-noconflict/mode-javascript"),
 		defaultText: `console.log("deniz abi kornaya bas")`,
-		runnerName: "JavaScript (Node.js 12.14.0)",
+		runnerName: "JavaScript (Bun 1.1.33)",
 		mode: "javascript",
 		iconClass: "devicon-javascript-plain",
 	},
 	78: {
-		// Kotlin (1.3.70)
 		extensionModule: () => import("ace-builds/src-noconflict/mode-kotlin"),
 		defaultText: `fun main() {
     println("deniz abi kornaya bas")
 }`,
-		runnerName: "Kotlin (1.3.70)",
+		runnerName: "Kotlin (2.0.21)",
 		mode: "kotlin",
 		iconClass: "devicon-kotlin-plain",
 	},
 	64: {
-		// Lua (5.3.5)
 		extensionModule: () => import("ace-builds/src-noconflict/mode-lua"),
 		defaultText: `--[[--
 num_args takes in 5.1 byte code and extracts the number of arguments
@@ -668,11 +650,10 @@ table.maxn is deprecated, use # instead.
 print(table.maxn{1,2,[4]=4,[8]=8}) -- outputs 8 instead of 2
 
 print(5 --[[ blah ]])`,
-		runnerName: "Lua (5.3.5)",
+		runnerName: "Lua (5.4.7)",
 		mode: "lua",
 		iconClass: "devicon-lua-plain",
 	},
-	// skip 89
 	79: {
 		// Objective-C (Clang 7.0.1)
 		extensionModule: () => import("ace-builds/src-noconflict/mode-objectivec"),
@@ -766,7 +747,6 @@ int main(int argc, const char *argv[]) {
 		iconClass: "devicon-objectivec-plain",
 	},
 	65: {
-		// OCaml (4.09.0)
 		extensionModule: () => import("ace-builds/src-noconflict/mode-ocaml"),
 		defaultText: `(* Define a type for the return record, making it polymorphic *)
 type 'a return_t = { return: 'a -> 'a }
@@ -790,20 +770,18 @@ let () =
   let result = sum_until_first_negative [1; 2; 3; -1; 5] in
   Printf.printf "Result: %d\n" result
 `,
-		runnerName: "OCaml (4.09.0)",
+		runnerName: "OCaml (5.2.0)",
 		mode: "ocaml",
 		iconClass: "devicon-ocaml-plain",
 	},
 	66: {
-		// Octave (5.1.0)
 		extensionModule: () => import("ace-builds/src-noconflict/mode-text"),
 		defaultText: `disp("deniz abi kornaya bas")`,
-		runnerName: "Octave (5.1.0)",
+		runnerName: "Octave (9.2.0)",
 		mode: "text",
 		iconClass: undefined,
 	},
 	67: {
-		// Pascal (FPC 3.0.4)
 		extensionModule: () => import("ace-builds/src-noconflict/mode-pascal"),
 		defaultText: `(*****************************************************************************
  * A simple bubble sort program.  Reads integers, one per line, and prints   *
@@ -853,30 +831,27 @@ PROGRAM Sort(input, output);
             writeln(arr[i])
     END.
             `,
-		runnerName: "Pascal (FPC 3.0.4)",
+		runnerName: "Pascal (FPC 3.2.2)",
 		mode: "pascal",
 		iconClass: undefined,
 	},
 	85: {
-		// Perl (5.28.1)
 		extensionModule: () => import("ace-builds/src-noconflict/mode-perl"),
 		defaultText: `print "deniz abi kornaya bas\n"`,
-		runnerName: "Perl (5.28.1)",
+		runnerName: "Perl (5.40.0)",
 		mode: "perl",
 		iconClass: "devicon-perl-plain",
 	},
 	68: {
-		// PHP (7.4.1)
 		extensionModule: () => import("ace-builds/src-noconflict/mode-php"),
 		defaultText: `<?php
 echo "deniz abi kornaya bas";
 ?>`,
-		runnerName: "PHP (7.4.1)",
+		runnerName: "PHP (8.3.13)",
 		mode: "php",
 		iconClass: "devicon-php-plain",
 	},
 	69: {
-		// Prolog (GNU Prolog 1.4.5)
 		extensionModule: () => import("ace-builds/src-noconflict/mode-prolog"),
 		defaultText: `partition([], _, [], []).
 partition([X|Xs], Pivot, Smalls, Bigs) :-
@@ -901,7 +876,6 @@ perfect(N) :-
 		iconClass: "devicon-prolog-plain",
 	},
 	70: {
-		// Python (2.7.17)
 		extensionModule: () =>
 			Promise.all([
 				import("ace-builds/src-noconflict/mode-python"),
@@ -914,15 +888,13 @@ perfect(N) :-
 		iconClass: "devicon-python-plain",
 	},
 	71: {
-		// Python (3.8.1)
 		extensionModule: () => import("ace-builds/src-noconflict/mode-python"),
 		defaultText: `print("deniz abi kornaya bas")`,
-		runnerName: "Python (3.8.1)",
+		runnerName: "Python (3.12.7)",
 		mode: "python",
 		iconClass: "devicon-python-plain",
 	},
 	80: {
-		// R (4.0.0)
 		extensionModule: () => import("ace-builds/src-noconflict/mode-r"),
 		defaultText: `Call:
 lm(formula = y ~ x)
@@ -944,12 +916,11 @@ F-statistic: 91.88 on 1 and 4 DF,  p-value: 0.000662
  
 > par(mfrow=c(2, 2))     # Request 2x2 plot layout
 > plot(lm_1)             # Diagnostic plot of regression model`,
-		runnerName: "R (4.0.0)",
+		runnerName: "R (4.4.1)",
 		mode: "r",
 		iconClass: undefined,
 	},
 	72: {
-		// Ruby (2.7.0)
 		extensionModule: () => import("ace-builds/src-noconflict/mode-ruby"),
 		defaultText: `puts "deniz abi kornaya bas"`,
 		runnerName: "Ruby (2.7.0)",
@@ -957,7 +928,6 @@ F-statistic: 91.88 on 1 and 4 DF,  p-value: 0.000662
 		iconClass: "devicon-ruby-plain",
 	},
 	73: {
-		// Rust (1.40.0)
 		extensionModule: () => import("ace-builds/src-noconflict/mode-rust"),
 		defaultText: `use std::thread; // Import the thread module
 
@@ -1021,12 +991,11 @@ macro_rules! mac_variant {
     }
 }
 `,
-		runnerName: "Rust (1.40.0)",
+		runnerName: "Rust (1.82.0)",
 		mode: "rust",
 		iconClass: "devicon-rust-original",
 	},
 	81: {
-		// Scala (2.13.2)
 		extensionModule: () => import("ace-builds/src-noconflict/mode-scala"),
 		defaultText: `object Main {
   @volatile var pingCount = 0
@@ -1072,31 +1041,28 @@ macro_rules! mac_variant {
   }
 }
 `,
-		runnerName: "Scala (2.13.2)",
+		runnerName: "Scala (3.5.2)",
 		mode: "scala",
 		iconClass: "devicon-scala-plain",
 	},
 	82: {
-		// SQL (SQLite 3.27.2)
 		extensionModule: () => import("ace-builds/src-noconflict/mode-sql"),
 		defaultText: `SELECT "deniz abi kornaya bas"`,
-		runnerName: "SQL (SQLite 3.27.2)",
+		runnerName: "SQL (SQLite 3.46.1.1)",
 		mode: "sql",
 		iconClass: "devicon-sqlite-plain",
 	},
 	83: {
-		// Swift (5.2.3)
 		extensionModule: () => import("ace-builds/src-noconflict/mode-swift"),
 		defaultText: `print("deniz abi kornaya bas")`,
-		runnerName: "Swift (5.2.3)",
+		runnerName: "Swift (6.0.1)",
 		mode: "swift",
 		iconClass: "devicon-swift-plain",
 	},
 	84: {
-		// TypeScript (
 		extensionModule: () => import("ace-builds/src-noconflict/mode-typescript"),
 		defaultText: `console.log("deniz abi kornaya bas")`,
-		runnerName: "TypeScript (3.7.4)",
+		runnerName: "TypeScript (Bun 1.1.33)",
 		mode: "typescript",
 		iconClass: "devicon-typescript-plain",
 	},
