@@ -439,22 +439,62 @@ word_frequency(Words) ->
 		iconClass: "devicon-erlang-plain",
 	},
 	87: {
-		// F# (.NET Core SDK 3.1.202)
-		extensionModule: () => import("ace-builds/src-noconflict/mode-fsharp"),
-		defaultText: `(* fsharp (* example *) *)
-module Test =
-    let (*) x y = (x + y)
-    let func1 x = 
-        if x < 100 then
-            x*x
-        else
-            x*x + 1
-    let list = (-1, 42) :: [ for i in 0 .. 10 -> (i, func1(i)) ]
-    let verbatim = @"c:\Program "" Files\"
-    let trippleQuote = """ "hello world" """
-    
-    // print
-    printfn "The table of squares from 0 to 10 is:\n%A" list"`,
+		// Nim (2.2.0)
+		extensionModule: () => import("ace-builds/src-noconflict/mode-nim"),
+		defaultText: `from math import sqrt
+import strformat
+
+#---------------------------------------------------------------------------------------------------
+
+proc sumProperDivisors(n: int): int =
+  ## Compute the sum of proper divisors.
+  ## "n" is supposed to be odd.
+  result = 1
+  for d in countup(3, sqrt(n.toFloat).int, 2):
+    if n mod d == 0:
+      inc result, d
+      if n div d != d:
+        inc result, n div d
+
+#---------------------------------------------------------------------------------------------------
+
+iterator oddAbundant(start: int): tuple[n, s: int] =
+  ## Yield the odd abundant numbers and the sum of their proper
+  ## divisors greater or equal to "start".
+  var n = start + (start and 1 xor 1)   # Start with an odd number.
+  while true:
+    let s = n.sumProperDivisors()
+    if s > n:
+      yield (n, s)
+    inc n, 2
+
+#---------------------------------------------------------------------------------------------------
+
+echo "List of 25 first odd abundant numbers."
+echo "Rank  Number  Proper divisors sum"
+echo "----  -----   -------------------"
+var rank = 0
+for (n, s) in oddAbundant(1):
+  inc rank
+  echo fmt"{rank:2}:   {n:5}   {s:5}"
+  if rank == 25:
+    break
+
+echo ""
+rank = 0
+for (n, s) in oddAbundant(1):
+  inc rank
+  if rank == 1000:
+    echo fmt"The 1000th odd abundant number is {n}."
+    echo fmt"The sum of its proper divisors is {s}."
+    break
+
+echo ""
+for (n, s) in oddAbundant(1_000_000_000):
+  if n > 1_000_000_000:
+    echo fmt"The first odd abundant number greater than 1000000000 is {n}."
+    echo fmt"The sum of its proper divisors is {s}."
+    break`,
 		runnerName: "F# (.NET Core SDK 3.1.202)",
 		mode: "fsharp",
 		iconClass: "devicon-fsharp-plain",
