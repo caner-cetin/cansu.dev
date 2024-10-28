@@ -1,7 +1,6 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
-import { zValidator } from "@hono/zod-validator";
 import { Judge0 } from "./judge0";
 import dayjs from "dayjs";
 import { HTTPException } from "hono/http-exception";
@@ -50,14 +49,10 @@ app.get("/health", async (c) => {
 	return c.json(health);
 });
 
-app.get(
-	"/judge/languages",
-	zValidator("json", LanguagesResponse),
-	async (c) => {
-		const languages = await Judge0.Language.getAll(c);
-		return c.json(languages);
-	},
-);
+app.get("/judge/languages", async (c) => {
+	const languages = await Judge0.Language.getAll(c);
+	return c.json(languages);
+});
 
 app.post("/judge/submit/code", async (c) => {
 	const code = await c.req.text();
@@ -110,10 +105,12 @@ app.put("/judge/submit/:id", rateLimiter, async (c) => {
 	const db = createDB(c.env.DATABASE_URL);
 	const submission = await db
 		.selectFrom("submissions")
-		.select(["sourcecode", "stdin"])
+		.select(["sourcecode", "stdin", "sent"])
 		.where("id", "=", Number(id))
 		.executeTakeFirst();
-
+	if (submission?.sent === true) {
+		throw new HTTPException(400, { message: "Submission already sent" });
+	}
 	if (!submission) {
 		throw new HTTPException(400, { message: "Invalid submission ID" });
 	}
@@ -126,6 +123,12 @@ app.put("/judge/submit/:id", rateLimiter, async (c) => {
 		false,
 		c,
 	);
+
+	await db.updateTable("submissions").set({
+		updatedat: dayjs(),
+		sent: true,
+		judgetoken: result.token,
+	});
 
 	return c.json(result);
 });

@@ -24,59 +24,52 @@ export const rateLimiter: MiddlewareHandler<{ Bindings: Bindings }> = async (
 	next,
 ) => {
 	const key = getRateLimitKey(c);
-	try {
-		const rateLimitInfoStr = await c.env.RATE_LIMIT_KV.get(key);
-		const now = dayjs();
+	const rateLimitInfoStr = await c.env.RATE_LIMIT_KV.get(key);
+	const now = dayjs();
 
-		let rateLimitInfo: RateLimitInfo;
-		if (rateLimitInfoStr) {
-			rateLimitInfo = JSON.parse(rateLimitInfoStr);
+	let rateLimitInfo: RateLimitInfo;
+	if (rateLimitInfoStr) {
+		rateLimitInfo = JSON.parse(rateLimitInfoStr);
 
-			if (now.valueOf() - rateLimitInfo.timestamp > WINDOW_SIZE) {
-				rateLimitInfo = {
-					count: 1,
-					timestamp: now.valueOf(),
-				};
-			} else if (rateLimitInfo.count >= RATE_LIMIT) {
-				const remainingTime = Math.ceil(
-					(WINDOW_SIZE - (now.valueOf() - rateLimitInfo.timestamp)) / 1000,
-				);
-
-				throw new HTTPException(429, {
-					message: `Rate limit exceeded. Try again in ${remainingTime} seconds`,
-				});
-			} else {
-				rateLimitInfo.count++;
-			}
-		} else {
+		if (now.valueOf() - rateLimitInfo.timestamp > WINDOW_SIZE) {
 			rateLimitInfo = {
 				count: 1,
 				timestamp: now.valueOf(),
 			};
+		} else if (rateLimitInfo.count >= RATE_LIMIT) {
+			const remainingTime = Math.ceil(
+				(WINDOW_SIZE - (now.valueOf() - rateLimitInfo.timestamp)) / 1000,
+			);
+
+			throw new HTTPException(429, {
+				message: `Rate limit exceeded. Try again in ${remainingTime} seconds`,
+			});
+		} else {
+			rateLimitInfo.count++;
 		}
-
-		await c.env.RATE_LIMIT_KV.put(key, JSON.stringify(rateLimitInfo), {
-			expirationTtl: WINDOW_SIZE / 1000,
-		});
-
-		c.header("X-RateLimit-Limit", RATE_LIMIT.toString());
-		c.header(
-			"X-RateLimit-Remaining",
-			(RATE_LIMIT - rateLimitInfo.count).toString(),
-		);
-		c.header(
-			"X-RateLimit-Reset",
-			dayjs(rateLimitInfo.timestamp)
-				.add(WINDOW_SIZE, "millisecond")
-				.valueOf()
-				.toString(),
-		);
-
-		await next();
-	} catch (error) {
-		if (error instanceof HTTPException) {
-			throw error;
-		}
-		throw new HTTPException(500, { message: "Rate limiting error" });
+	} else {
+		rateLimitInfo = {
+			count: 1,
+			timestamp: now.valueOf(),
+		};
 	}
+
+	await c.env.RATE_LIMIT_KV.put(key, JSON.stringify(rateLimitInfo), {
+		expirationTtl: WINDOW_SIZE / 1000,
+	});
+
+	c.header("X-RateLimit-Limit", RATE_LIMIT.toString());
+	c.header(
+		"X-RateLimit-Remaining",
+		(RATE_LIMIT - rateLimitInfo.count).toString(),
+	);
+	c.header(
+		"X-RateLimit-Reset",
+		dayjs(rateLimitInfo.timestamp)
+			.add(WINDOW_SIZE, "millisecond")
+			.valueOf()
+			.toString(),
+	);
+
+	await next();
 };
