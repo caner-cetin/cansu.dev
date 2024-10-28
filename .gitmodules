@@ -1,3 +1,6 @@
 [submodule "code"]
 	path = code
 	url = https://github.com/caner-cetin/code-cansu-dev.git
+[submodule "resume"]
+	path = resume
+	url = https://github.com/caner-cetin/resume-cansu-dev.git
