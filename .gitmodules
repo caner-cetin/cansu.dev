@@ -4,3 +4,6 @@
 [submodule "resume"]
 	path = resume
 	url = https://github.com/caner-cetin/resume-cansu-dev.git
+[submodule "dj"]
+	path = dj
+	url = https://github.com/caner-cetin/dj-cansu-dev.git
