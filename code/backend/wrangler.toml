@@ -11,9 +11,3 @@ JUDGE0_AUTHN_HEADER = "X-Auth-Token"
 [observability]
 enabled = true
 head_sampling_rate = 1
-
-[[unsafe.bindings]]
-name = "CODE_RATE_LIMITER"
-type = "ratelimit"
-namespace_id = "1661"
-simple = { limit = 40, period = 60 }

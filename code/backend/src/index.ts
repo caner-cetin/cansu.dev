@@ -1,15 +1,13 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
-import { jwt } from "hono/jwt";
 import { logger } from "hono/logger";
-import { z } from "zod";
 import { zValidator } from "@hono/zod-validator";
 import { Judge0 } from "./judge0";
 import dayjs from "dayjs";
 import { HTTPException } from "hono/http-exception";
 import { createDB } from "./db";
-import { cloudflareRateLimiter } from "@hono-rate-limiter/cloudflare";
 import { LanguagesResponse } from "./schemas";
+import { rateLimiter } from "./middlewares/ratelimit";
 export type Bindings = {
 	DATABASE_URL: string;
 	JWT_SECRET: string;
@@ -19,11 +17,11 @@ export type Bindings = {
 	JUDGE0_AUTHZ_TOKEN: string;
 	JUDGE0_AUTHN_HEADER: string;
 	JUDGE0_AUTHN_TOKEN: string;
-	RATE_LIMITER: RateLimit;
+	// @ts-ignore
+	RATE_LIMIT_KV: KVNamespace;
 };
 
 const app = new Hono<{ Bindings: Bindings }>();
-
 app.use("*", logger());
 app.use(
 	"*",
@@ -106,8 +104,7 @@ app.post("/judge/submit/stdin", async (c) => {
 
 	return c.json({ success: true });
 });
-
-app.put("/judge/submit/:id", async (c) => {
+app.put("/judge/submit/:id", rateLimiter, async (c) => {
 	const id = c.req.param("id");
 	const language = Number(c.req.query("language"));
 	const db = createDB(c.env.DATABASE_URL);

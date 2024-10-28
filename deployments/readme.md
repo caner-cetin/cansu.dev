@@ -56,6 +56,9 @@ mv cansu.dev/judge0.Gemfile.lock          cansu.dev/judge0/Gemfile.lock
 mv cansu.dev/judge0.languages.active.rb   cansu.dev/judge0/languages/active.rb
 mv cansu.dev/judge0.languages.archived.rb cansu.dev/judge0/languages/archived.rb
 mv cansu.dev/install-gcc.sh               cansu.dev/compilers/install-gcc.sh
+# also change compile and run configs in judge0/app/jobs/isolate_job.rb
+# -E PATH=\"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/.asdf/bin:/usr/local/.asdf/shims\" \
+# -E LANG -E LANGUAGE -E LC_ALL -E JUDGE0_HOMEPAGE -E JUDGE0_SOURCE_CODE -E JUDGE0_MAINTAINER -E JUDGE0_VERSION -E ASDF_DATA_DIR=/usr/local/.asdf \
 #
 docker buildx create --use --name larger_log --driver-opt env.BUILDKIT_STEP_LOG_MAX_SIZE=500000000
 docker buildx use larger_log

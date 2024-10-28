@@ -57,27 +57,27 @@ mail [hello@cansu.dev](mailto:hello@cansu.dev) for all feedbacks, questions, sug
 
 ## changelog
 ### 2024-10-27
-#### added
-- GCC compiler versions:
-  - GCC 10.x
-  - GCC 11.x
-  - GCC 12.x
-  - GCC 13.x
-  - Planned: GCC 3.x, 7.x, 8.x, 9.x, 14.x
+- added
+  - GCC compiler versions:
+    - GCC 10.x
+    - GCC 11.x
+    - GCC 12.x
+    - GCC 13.x
+    - planned: GCC 3.x, 7.x, 8.x, 9.x, 14.x
 
-- Language Support:
-  - Nim
-  - Bun runtime for JavaScript/TypeScript
+  - language Support:
+    - nim
+    - bun runtime for js/ts
 
-#### changed
-- JavaScript/TypeScript Runtime Environment:
-  - Replaced Node.js with Bun as primary runtime
-  - Planned: Support for multiple runtimes (Deno, Node.js, Bun)
+- changed
+  - js/ts:
+    - replaced node.js with bun as primary runtime
+    - planned: support for multiple runtimes (deno, node.js, bun)
+  
+- updated
+  - all compilers, interpreters, and runtimes updated to latest stable versions
 
-#### updated
-- All compilers, interpreters, and runtimes updated to latest stable versions
-
-#### removed
-- F# (due to excessive file size needed for compiling)
-- BASIC
+- removed
+  - F# (due to excessive file size needed for compiling)
+  - BASIC
 

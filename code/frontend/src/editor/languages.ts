@@ -837,7 +837,32 @@ PROGRAM Sort(input, output);
 	},
 	85: {
 		extensionModule: () => import("ace-builds/src-noconflict/mode-perl"),
-		defaultText: `print "deniz abi kornaya bas\n"`,
+		defaultText: `#!perl
+# https://rosettacode.org/wiki/Bernoulli_numbers#Perl
+use strict;
+use warnings;
+use List::Util qw(max);
+use Math::BigRat;
+
+my $one = Math::BigRat->new(1);
+sub bernoulli_print {
+	my @a;
+	for my $m ( 0 .. 60 ) {
+		push @a, $one / ($m + 1);
+		for my $j ( reverse 1 .. $m ) {
+				# This line:
+				( $a[$j-1] -= $a[$j] ) *= $j;
+				# is a faster version of the following line:
+				# $a[$j-1] = $j * ($a[$j-1] - $a[$j]);
+				# since it avoids unnecessary object creation.
+		}
+		next unless $a[0];
+		printf "B(%2d) = %44s/%s\n", $m, $a[0]->parts;
+	}
+}
+
+bernoulli_print();
+`,
 		runnerName: "Perl (5.40.0)",
 		mode: "perl",
 		iconClass: "devicon-perl-plain",
@@ -845,7 +870,20 @@ PROGRAM Sort(input, output);
 	68: {
 		extensionModule: () => import("ace-builds/src-noconflict/mode-php"),
 		defaultText: `<?php
-echo "deniz abi kornaya bas";
+// https://rosettacode.org/wiki/99_bottles_of_beer#PHP
+$plural = 's';
+foreach (range(99, 1) as $i) {
+    echo "$i bottle$plural of beer on the wall,\n";
+    echo "$i bottle$plural of beer!\n";
+    echo "Take one down, pass it around!\n";
+    if ($i - 1 == 1)
+        $plural = '';
+    
+    if ($i > 1)
+        echo ($i - 1) . " bottle$plural of beer on the wall!\n\n";
+    else
+        echo "No more bottles of beer on the wall!\n";
+}
 ?>`,
 		runnerName: "PHP (8.3.13)",
 		mode: "php",
