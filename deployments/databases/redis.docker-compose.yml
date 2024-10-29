@@ -13,7 +13,7 @@ services:
         volumes:
           - dragonflydata:/data
         networks:
-          - cansu_dev_dj_backend_bridge
+          - database_bridge
           - cansu_dev_code_judge0_bridge
   redis-commander:
         image: ghcr.io/joeferner/redis-commander:latest
@@ -26,12 +26,12 @@ services:
           - "8081:8081"
         user: redis
         networks:
-          - cansu_dev_dj_backend_bridge
+          - database_bridge
         depends_on:
           - dragonfly
 
 networks:
-  cansu_dev_dj_backend_bridge:
+  database_bridge:
     external: true
   cansu_dev_code_judge0_bridge:
     external: true

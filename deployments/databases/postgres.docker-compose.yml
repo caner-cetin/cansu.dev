@@ -27,7 +27,7 @@ services:
         REPMGR_NODE_NETWORK_NAME: pg-0
         REPMGR_PORT_NUMBER: 5432
       networks:
-        - cansu_dev_dj_backend_bridge
+        - database_bridge
         - cansu_dev_code_judge0_bridge
         - replica_bridge
   pg-1:
@@ -44,7 +44,7 @@ services:
         REPMGR_NODE_NETWORK_NAME: pg-1
         REPMGR_PORT_NUMBER: 5432
       networks:
-        - cansu_dev_dj_backend_bridge
+        - database_bridge
         - cansu_dev_code_judge0_bridge
         - replica_bridge
   pgpool:
@@ -70,12 +70,12 @@ services:
           timeout: 5s
           retries: 5
         networks:
-          - cansu_dev_dj_backend_bridge
+          - database_bridge
           - cansu_dev_code_judge0_bridge
           - replica_bridge
 
 networks:
-  cansu_dev_dj_backend_bridge:
+  database_bridge:
     external: true
   cansu_dev_code_judge0_bridge:
     external: true

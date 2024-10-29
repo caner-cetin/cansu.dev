@@ -6,7 +6,7 @@
 ## dockercompose
 ### networks
 ```bash
-docker network create cansu_dev_dj_backend_bridge
+docker network create database_bridge
 docker network create cansu_dev_code_judge0_bridge
 ```
 ### .env
@@ -23,23 +23,12 @@ POSTGRESQL_ALL_PASSWORDS=
 REPMGR_USERNAME=
 REPMGR_PASSWORD=
 REDIS_PASSWORD=
-
-
-# required for cansu.dev/dj
-CANSU_DEV_DJ_API_PORT=
-UPLOAD_ADMIN_USERNAME=
-UPLOAD_ADMIN_PASSWORD=
-S3_ACCOUNT_ID=
-S3_ACCESS_KEY_ID=
-S3_ACCESS_KEY_SECRET=
 ```
 ### run
 ```bash
 docker compose -f databases/postgres.docker-compose.yml   --env-file .env up -d
 docker compose -f databases/redis.docker-compose.yml      --env-file .env up -d
 docker compose -f monitoring/docker-compose.yml           --env-file .env up -d
-# https://api.cansu.dev/health
-docker compose -f cansu.dev/backend.docker-compose.yml    --env-file .env up -d
 # https://judge.cansu.dev/docs
 git clone https://github.com/judge0/judge0.git cansu.dev
 git clone https://github.com/judge0/compilers.git cansu.dev
