@@ -31,8 +31,19 @@ RUN apt-get update && \
   gem install bundler:2.1.4
 
 RUN apt-get install ruby-dev
-RUN mkdir -p /opt/.gem && \
+RUN useradd -u 1000 -m -r judge0 && \
+  mkdir -p /opt/.gem && \
   chown -R judge0:judge0 /opt/.gem
+RUN curl -fSsL "http://ftp.de.debian.org/debian/pool/main/a/acl/libacl1_2.3.2-2+b1_amd64.deb" -o libacl1_2.3.2-2+b1_amd64.deb && \
+  dpkg -i libacl1_2.3.2-2+b1_amd64.deb && \
+  curl -fSsL "http://ftp.de.debian.org/debian/pool/main/a/acl/acl_2.3.2-2+b1_amd64.deb" -o acl_2.3.2-2+b1_amd64.deb && \
+  dpkg -i acl_2.3.2-2+b1_amd64.deb && \
+  apt-get update
+
+RUN addgroup isolated_box_group
+RUN gpasswd -a judge0 isolated_box_group
+RUN setfacl -Rm g:isolated_box_group:rwX $BOX_ROOT
+RUN setfacl -d -Rm g:isolated_box_group:rwX $BOX_ROOT
 
 EXPOSE 2358
 WORKDIR /api
@@ -47,7 +58,6 @@ COPY --chown=judge0:judge0 . .
 RUN chown -R judge0:judge0 /api/tmp/
 
 USER judge0
-RUN asdf global kotlin 2.0.21
 ENTRYPOINT ["/api/docker-entrypoint.sh"]
 CMD ["/api/scripts/server"]
 
