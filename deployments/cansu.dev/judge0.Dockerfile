@@ -31,9 +31,7 @@ RUN apt-get update && \
   gem install bundler:2.1.4
 
 RUN apt-get install ruby-dev
-RUN useradd -u 1000 -m -r judge0 && \
-  echo "judge0 ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
-  mkdir -p /opt/.gem && \
+RUN mkdir -p /opt/.gem && \
   chown -R judge0:judge0 /opt/.gem
 
 EXPOSE 2358
