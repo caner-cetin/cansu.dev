@@ -7,6 +7,7 @@ services:
     networks:
       - plane-dev
       - database_bridge
+      - loki
     environment:
       - HF_TOKEN=${HF_TOKEN}
       - HF_MODEL_URL=${HF_MODEL_URL}
@@ -33,4 +34,6 @@ networks:
   plane-dev:
     external: true
   database_bridge:
+    external: true
+  loki:
     external: true

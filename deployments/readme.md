@@ -9,7 +9,8 @@
 docker network create database_bridge
 docker network create plane-dev
 ```
-### .env
+### config
+#### .env
 ```bash
 POSTGRESQL_POSTGRES_PASSWORD= 
 POSTGRESQL_PSQL_URL=
@@ -42,35 +43,36 @@ S3_ACCESS_KEY_SECRET=
 PLANE_PROXY_PORT=
 PLANE_CONTROLLER_PORT=
 ```
+#### config.monitoring
+```bash
+GF_SECURITY_ADMIN_PASSWORD=
+GF_USERS_ALLOW_SIGN_UP=false
+GF_PATHS_PROVISIONING=/etc/grafana/provisioning
+GF_INSTALL_PLUGINS=https://storage.googleapis.com/integration-artifacts/grafana-lokiexplore-app/grafana-lokiexplore-app-latest.zip;grafana-lokiexplore-app 
+```
 ### run
 ```bash
 # ====== common services ===
 # => 1 replica 1 primary and 1 pgpool instances for postgres 16
 # => dragonfly
-# => monitoring (NOT USED)
+# => monitoring stack with 
+# ==> grafana as dashboard
+# ==> prometheus&cadvisor and loki&promtail as datasources
+# ==> alert manager
 # ==========================
 docker compose -f databases/postgres.docker-compose.yml   --env-file .env up -d
 docker compose -f databases/redis.docker-compose.yml      --env-file .env up -d
 docker compose -f monitoring/docker-compose.yml           --env-file .env up -d
 # ===== code.cansu.dev =======
 # => compiler and backend image
-# => https://plane.dev instance
 # ============================
-# create a custom build kit with absurd amount of max log size
-docker buildx create --use --name larger_log --driver-opt env.BUILDKIT_STEP_LOG_MAX_SIZE=500000000
-docker buildx use larger_log
-# and then build the compilers, multilog with split the logs for you
-exec docker buildx build -f cansu.dev/playground.compilers.Dockerfile cansu.dev -t code-cansu-dev-runner 2>&1 | multilog t s2000000 n10 ./logs &
-# go back to default build kit
-docker buildx use default
-# main backend
-docker build -f cansu.dev/playground.Dockerfile ../code/backend -t code-cansu-dev-backend
-# 
-# replace the original docker-compose (only ports and hosts are modified)
+docker build -f cansu.dev/playground.compilers.Dockerfile cansu.dev -t code-cansu-dev-runner 2>&1 | multilog t s2000000 n10 ./logs &
+docker compose -f cansu.dev/playground.docker-compose.yml --env-file .env up -d
+# ======= plane.dev ===========
+# 1x plane drone, controller and proxy
+# =============================
 mv cansu.dev/plane.docker-compose.yml plane/docker/docker-compose.yml
 docker compose -f plane/docker/docker-compose.yml up -d
-#
-docker compose -f cansu.dev/playground.docker-compose.yml --env-file .env up -d
 ```
 all services are tunneled from Cloudflare Zero Trust, so there is no NGINX config.
 

@@ -26,9 +26,9 @@ services:
       - /sys:/host/sys:ro
       - /:/rootfs:ro
       - /:/host:ro,rslave
-    command: 
+    command:
       - '--path.rootfs=/host'
-      - '--path.procfs=/host/proc' 
+      - '--path.procfs=/host/proc'
       - '--path.sysfs=/host/sys'
       - --collector.filesystem.ignored-mount-points
       - "^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
@@ -74,20 +74,43 @@ services:
       - 3000:3000
     volumes:
       - grafana_data:/var/lib/grafana
-      - ~/deployment/monitoring/grafana/provisioning/:/etc/grafana/provisioning/
+      - ./grafana/provisioning/:/etc/grafana/provisioning/
     env_file:
-      - ~/deployment/monitoring/grafana/config.monitoring
+      - ./grafana/config.monitoring
     networks:
       - back-tier
       - front-tier
+      - loki
     restart: always
+  loki:
+    image: grafana/loki:3.3.0
+    ports:
+      - "3169:3169"
+    volumes:
+      - ./loki/config.yaml:/etc/loki/config.yaml
+    command: -config.file=/etc/loki/config.yaml
+    networks:
+      - loki
+      - back-tier
+
+  promtail:
+    image: grafana/promtail:3.3.0
+    volumes:
+      - /var/log:/var/log
+    command: -config.file=/etc/promtail/config.yml
+    networks:
+      - loki
+      - back-tier
 
 volumes:
   grafana_data:
   prometheus_data:
+
 
 networks:
   back-tier:
     driver: bridge
   front-tier:
     driver: bridge
+  loki:
+    external: true

@@ -48,4 +48,13 @@ datasources:
     version: 1
     # <bool> allow users to edit datasources from the UI.
     editable: true
+  - name: Loki
+    type: loki
+    access: proxy 
+    orgId: 1
+    url: http://loki:3169
+    basicAuth: false
+    isDefault: false
+    version: 1
+    editable: false
   # <string, required> name of the datasource. Required
