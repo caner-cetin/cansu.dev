@@ -2,7 +2,7 @@
 
 set -xe 
 VERSIONS="$1"
-for VERSION in VERSIONS; do
+for VERSION in $VERSIONS; do
   mkdir -p "/usr/local/gprolog-$VERSION/bin"
   cd /tmp
   curl -fSsl "http://ftp.de.debian.org/debian/pool/main/g/gprolog/gprolog_${VERSION}_amd64.deb" -o "/tmp/gprolog_${VERSION}_amd64.deb"

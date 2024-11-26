@@ -14,7 +14,6 @@ services:
           - dragonflydata:/data
         networks:
           - database_bridge
-          - cansu_dev_code_judge0_bridge
   redis-commander:
         image: ghcr.io/joeferner/redis-commander:latest
         restart: always
@@ -32,8 +31,6 @@ services:
 
 networks:
   database_bridge:
-    external: true
-  cansu_dev_code_judge0_bridge:
     external: true
 
 volumes:

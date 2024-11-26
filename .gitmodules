@@ -7,3 +7,6 @@
 [submodule "dj"]
 	path = dj
 	url = https://github.com/caner-cetin/dj-cansu-dev.git
+[submodule "deployments/plane"]
+	path = deployments/plane
+	url = https://github.com/jamsocket/plane.git

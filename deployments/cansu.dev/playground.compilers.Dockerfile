@@ -52,7 +52,7 @@ RUN set -xe && \
 COPY scripts/ /usr/local/bin/scripts/
 RUN chmod +x /usr/local/bin/scripts/*.sh
 
-ENV BASH_VERSIONS="5.2.37"
+ENV BASH_VERSIONS="5.0.4"
 RUN /usr/local/bin/scripts/install-bash.sh "$BASH_VERSIONS"
 
 ENV FBC_VERSION="1.10.1"
@@ -144,28 +144,8 @@ RUN set -xe && \
   rm -rf /tmp/*; \
   done
 
-ENV R_VERSIONS \
-  4.4.1
-RUN set -xe && \
-  apt-get update && \
-  apt-get install -y --no-install-recommends libpcre2-dev && \
-  rm -rf /var/lib/apt/lists/* && \
-  for VERSION in $R_VERSIONS; do \
-  curl -fSsL "https://cloud.r-project.org/src/base/R-4/R-$VERSION.tar.gz" -o /tmp/r-$VERSION.tar.gz && \
-  mkdir /tmp/r-$VERSION && \
-  tar -xf /tmp/r-$VERSION.tar.gz -C /tmp/r-$VERSION --strip-components=1 && \
-  rm /tmp/r-$VERSION.tar.gz && \
-  cd /tmp/r-$VERSION && \
-  ./configure --with-x=no \
-  --prefix=/usr/local/r-$VERSION && \
-  make -j$(nproc) && \
-  make -j$(nproc) install && \
-  rm -rf /tmp/*; \
-  done
-
-ENV NASM_VERSIONS="2.14-1 2.15.05-1 2.16.03-1"
+ENV NASM_VERSIONS="2.16.03-1"
 RUN /usr/local/bin/scripts/install-nasm.sh "$NASM_VERSIONS"
-RUN /usr/local/bin/scripts/install-gcc.sh
 
 ENV SWIFT_VERSIONS \
   6.0.1
@@ -180,7 +160,7 @@ RUN set -xe && \
 
 
 RUN set -xe && \
-  curl -fSsL "https://dlcdn.apache.org/groovy/4.0.23/distribution/apache-groovy-binary-4.0.23.zip" -o /tmp/groovy.zip && \
+  curl -fSsL "https://dlcdn.apache.org/groovy/4.0.24/distribution/apache-groovy-binary-4.0.24.zip" -o /tmp/groovy.zip && \
   unzip /tmp/groovy.zip -d /usr/local && \
   rm -rf /tmp/*
 
@@ -304,35 +284,7 @@ RUN asdf install nim ${NIM_VERSION} && \
   asdf global nim ${NIM_VERSION} && \
   asdf reshim nim ${NIM_VERSION}
 
-
-# Python packages 
-# RUN python3.12 -m pip install numpy pandas matplotlib seaborn scikit-learn
-
-# Install isolate
-RUN set -xe && \
+RUN curl -fSsL http://ftp.de.debian.org/debian/pool/main/t/time/time_1.9-0.2_amd64.deb -o time.deb && \
+  dpkg -i time.deb && \
   apt-get update && \
-  apt-get install -y --no-install-recommends git libcap-dev && \
-  rm -rf /var/lib/apt/lists/* && \
-  git clone https://github.com/judge0/isolate.git /tmp/isolate && \
-  cd /tmp/isolate && \
-  git checkout ad39cc4d0fbb577fb545910095c9da5ef8fc9a1a && \
-  make -j$(nproc) install && \
-  rm -rf /tmp/*
-
-ENV BOX_ROOT /var/local/lib/isolate
-
-LABEL maintainer="Herman Zvonimir Došilović <hermanz.dosilovic@gmail.com>"
-LABEL updated="Caner Cetin <hello@cansu.dev>"
-LABEL version="1.4.0"
-
-# Destined as the servant to the night where your moon dreams of the dirt
-# And the sharp tongue of your zealous will is only congruent with the salt
-# In your mouth and the approaching eulogy of the world.
-# Lost in the patterns of youth and the ghost of your aches comes back to haunt you.
-# And the forging of change makes no difference.
-# Memories fly through the mask of your life shielding you from time.
-# The years that birthed the shell that you gained.
-# Hunched over in apathetic grief with a disregard for steps except the one taken back.
-# Perched up on a rope crafted in smoke, a sword wielding death that buried your hope.
-# Focusing on light through the blinds, a slave to reality under a monarch in the sky.
-# Lost in the patterns of youth where the windows shine brightly back at you.x
+  rm time.deb

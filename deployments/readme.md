@@ -7,55 +7,89 @@
 ### networks
 ```bash
 docker network create database_bridge
-docker network create cansu_dev_code_judge0_bridge
+docker network create plane-dev
 ```
 ### .env
 ```bash
 POSTGRESQL_POSTGRES_PASSWORD= 
+POSTGRESQL_PSQL_URL=
 POSTGRESQL_USERNAME=
 POSTGRESQL_PASSWORD=
+POSTGRESQL_URL=
 POSTGRESQL_DB=
-# comma delimited usernames
 POSTGRESQL_ALL_USERNAMES=
-# comma delimited passwords
 POSTGRESQL_ALL_PASSWORDS=
-# postgresql replica manager
+
+CANSU_DEV_DJ_API_PORT=
+
+HF_TOKEN=
+HF_MODEL_URL=
+
+
+REDIS_PASSWORD=
+
 REPMGR_USERNAME=
 REPMGR_PASSWORD=
-REDIS_PASSWORD=
+
+# cansu.dev/dj
+UPLOAD_ADMIN_USERNAME=
+UPLOAD_ADMIN_PASSWORD=
+S3_ACCOUNT_ID=
+S3_ACCESS_KEY_ID=
+S3_ACCESS_KEY_SECRET=
+
+# dynamic ports
+PLANE_PROXY_PORT=
+PLANE_CONTROLLER_PORT=
 ```
 ### run
 ```bash
+# ====== common services ===
+# => 1 replica 1 primary and 1 pgpool instances for postgres 16
+# => dragonfly
+# => monitoring (NOT USED)
+# ==========================
 docker compose -f databases/postgres.docker-compose.yml   --env-file .env up -d
 docker compose -f databases/redis.docker-compose.yml      --env-file .env up -d
 docker compose -f monitoring/docker-compose.yml           --env-file .env up -d
-# https://judge.cansu.dev/docs
-git clone https://github.com/judge0/judge0.git cansu.dev
-git clone https://github.com/judge0/compilers.git cansu.dev
-#
-rm cansu.dev/compilers/Dockerfile
-rm cansu.dev/judge0/Dockerfile
-rm cansu.dev/judge0/Gemfile.lock
-rm cansu.dev/judge0/languages/active.rb
-rm cansu.dev/judge0/languages/archived.rb
-#
-mv cansu.dev/judge0.compilers.Dockerfile  cansu.dev/compilers/Dockerfile
-mv cansu.dev/judge0.Dockerfile            cansu.dev/judge0/Dockerfile
-mv cansu.dev/judge0.Gemfile.lock          cansu.dev/judge0/Gemfile.lock
-mv cansu.dev/judge0.languages.active.rb   cansu.dev/judge0/languages/active.rb
-mv cansu.dev/judge0.languages.archived.rb cansu.dev/judge0/languages/archived.rb
-mv cansu.dev/install-gcc.sh               cansu.dev/compilers/install-gcc.sh
-# also change compile and run configs in judge0/app/jobs/isolate_job.rb
-# -E PATH=\"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/.asdf/bin:/usr/local/.asdf/shims\" \
-# -E LANG -E LANGUAGE -E LC_ALL -E JUDGE0_HOMEPAGE -E JUDGE0_SOURCE_CODE -E JUDGE0_MAINTAINER -E JUDGE0_VERSION -E ASDF_DATA_DIR=/usr/local/.asdf \
-#
+# ===== code.cansu.dev =======
+# => compiler and backend image
+# => https://plane.dev instance
+# ============================
+# create a custom build kit with absurd amount of max log size
 docker buildx create --use --name larger_log --driver-opt env.BUILDKIT_STEP_LOG_MAX_SIZE=500000000
 docker buildx use larger_log
-exec docker buildx build -f cansu.dev/compilers/Dockerfile cansu.dev/compilers -t judge0-compilers 2>&1 | multilog t s2000000 n10 ./logs &
-#
+# and then build the compilers, multilog with split the logs for you
+exec docker buildx build -f cansu.dev/playground.compilers.Dockerfile cansu.dev -t code-cansu-dev-runner 2>&1 | multilog t s2000000 n10 ./logs &
+# go back to default build kit
 docker buildx use default
-docker build -f cansu.dev/judge0/Dockerfile cansu.dev/judge0 -t judge0
+# main backend
+docker build -f cansu.dev/playground.Dockerfile ../code/backend -t code-cansu-dev-backend
+# 
+# replace the original docker-compose (only ports and hosts are modified)
+mv cansu.dev/plane.docker-compose.yml plane/docker/docker-compose.yml
+docker compose -f plane/docker/docker-compose.yml up -d
 #
-docker compose -f cansu.dev/judge0.docker-compose.yml --env-file .env up -d
+docker compose -f cansu.dev/playground.docker-compose.yml --env-file .env up -d
 ```
 all services are tunneled from Cloudflare Zero Trust, so there is no NGINX config.
+
+don't forget firewall:
+```bash
+sudo apt install ufw
+# ensure that IPv6 is enabled
+sudo nano /etc/default/ufw
+# deny all
+sudo ufw default deny incoming
+# allow all
+sudo ufw default allow outgoing
+# allow ssh
+sudo ufw allow ssh
+# allow cloudflare tunnels
+sudo ufw allow 443
+# change to your reverse proxy, zero trust is using 7844 and 443
+sudo ufw allow 7844
+# allow yourself
+sudo ufw allow from 203.0.113.101
+sudo ufw allow enable
+```

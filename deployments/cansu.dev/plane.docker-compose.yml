@@ -1,0 +1,71 @@
+services:
+  controller:
+    container_name: plane-controller
+    image: plane/plane:latest
+    restart: unless-stopped
+    build:
+      dockerfile: docker/Dockerfile
+      context: ../
+    environment:
+      - POSTGRESQL_PSQL_URL=${POSTGRESQL_PSQL_URL}
+      - PLANE_PROXY_PORT=${PLANE_PROXY_PORT}
+    # Usage: 
+    # plane controller <--db <DB>|--port <PORT>|--host <HOST>|--controller-url <CONTROLLER_URL>|
+    #                   --default-cluster <DEFAULT_CLUSTER>|--cleanup-min-age-days <CLEANUP_MIN_AGE_DAYS>|
+    #                   --forward-auth <FORWARD_AUTH>>
+    command: >
+      controller --db ${POSTGRESQL_PSQL_URL} --default-cluster=plane-proxy:9090 --port ${PLANE_CONTROLLER_PORT} --host 0.0.0.0
+    networks:
+      - database_bridge
+      - plane-dev
+    ports:
+      - "${PLANE_CONTROLLER_PORT}:${PLANE_CONTROLLER_PORT}"
+
+  proxy:
+    container_name: plane-proxy
+    image: plane/plane:latest
+    restart: unless-stopped
+    build:
+      dockerfile: docker/Dockerfile
+      context: ../
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - PLANE_CONTROLLER_PORT=${PLANE_CONTROLLER_PORT}
+      - PLANE_PROXY_PORT=${PLANE_PROXY_PORT}
+    # Usage: 
+    # plane proxy <--name <NAME>|--controller-url <CONTROLLER_URL>|--cluster <CLUSTER>|--https|--http-port <HTTP_PORT>|--https-port <HTTPS_PORT>|
+    #             --cert-path <CERT_PATH>|--acme-endpoint <ACME_ENDPOINT>|--acme-email <ACME_EMAIL>|--acme-eab-kid <ACME_EAB_KID>|
+    #             --acme-eab-hmac-key <ACME_EAB_HMAC_KEY>|--root-redirect-url <ROOT_REDIRECT_URL>>
+    command: >
+      proxy --controller-url ws://plane-controller:${PLANE_CONTROLLER_PORT} --cluster plane-proxy:9090 --http-port 9090
+    networks:
+      - plane-dev
+      - database_bridge
+    ports:
+      - "${PLANE_PROXY_PORT}:9090"
+
+  drone:
+    container_name: plane-drone
+    image: plane/plane:latest
+    restart: unless-stopped
+    build:
+      dockerfile: docker/Dockerfile
+      context: ../
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - PLANE_CONTROLLER_PORT=${PLANE_CONTROLLER_PORT}
+      - PLANE_PROXY_PORT=${PLANE_PROXY_PORT}
+    command: >
+      drone --controller-url ws://plane-controller:${PLANE_CONTROLLER_PORT} --cluster 'plane-proxy:9090' --ip='host.docker.internal'
+    networks:
+      - plane-dev
+      - database_bridge
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+networks:
+  plane-dev:
+  database_bridge:
+    external: true
