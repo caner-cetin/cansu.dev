@@ -1,0 +1,30 @@
+name: cansu-dev-judge
+x-logging:
+  &default-logging
+  logging:
+    driver: json-file
+    options:
+      max-size: 100M
+services:
+  backend:
+    build:
+      context: ~/cansu.dev/code/backend
+      dockerfile: ~/cansu.dev/deployments/cansu.dev/playground.Dockerfile
+    networks:
+      - plane-dev
+      - database_bridge
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - HF_TOKEN=${HF_TOKEN}
+      - HF_MODEL_URL=${HF_MODEL_URL}
+      - REDIS_URL="redis://dragonfly:6379/2"
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - DATABASE_URL=${POSTGRESQL_URL}
+    ports:
+      - ${PORT:-6767}:${PORT:-6767}
+
+networks:
+  plane-dev:
+    external: true
+  database_bridge:
+    external: true

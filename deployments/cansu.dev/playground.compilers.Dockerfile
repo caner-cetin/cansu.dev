@@ -44,27 +44,16 @@ RUN ln -s /lib/x86_64-linux-gnu/libtinfo.so.6 /usr/lib/libtinfo.so.5
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && locale-gen
 ENV LANG=en_US.UTF-8 LANGUAGE=en_US:en LC_ALL=en_US.UTF-8
 
-COPY install-gcc.sh /tmp/install-gcc.sh
-RUN chmod +x /tmp/install-gcc.sh && /tmp/install-gcc.sh
-
 RUN set -xe && \
   apt-get update && \
   apt-get install -y --no-install-recommends clang-19 gnustep-devel && \
   rm -rf /var/lib/apt/lists/* && \
   ln -sf /usr/bin/clang-19 /usr/local/bin/clang-19
+COPY scripts/ /usr/local/bin/scripts/
+RUN chmod +x /usr/local/bin/scripts/*.sh
 
-
-ENV BASH_VERSION="5.2.37"
-RUN set -xe && \
-  curl -fSsL "https://ftpmirror.gnu.org/bash/bash-${BASH_VERSION}.tar.gz" -o /tmp/bash-${BASH_VERSION}.tar.gz && \
-  mkdir /tmp/bash-${BASH_VERSION} && \
-  tar -xf /tmp/bash-${BASH_VERSION}.tar.gz -C /tmp/bash-${BASH_VERSION} --strip-components=1 && \
-  rm /tmp/bash-${BASH_VERSION}.tar.gz && \
-  cd /tmp/bash-${BASH_VERSION} && \
-  ./configure --prefix=/usr/local/bash-${BASH_VERSION} && \
-  make -j$(nproc) && \
-  make -j$(nproc) install && \
-  rm -rf /tmp/*
+ENV BASH_VERSIONS="5.2.37"
+RUN /usr/local/bin/scripts/install-bash.sh "$BASH_VERSIONS"
 
 ENV FBC_VERSION="1.10.1"
 RUN set -xe && \
@@ -87,13 +76,8 @@ RUN apt-get update && \
   apt-get install -y --no-install-recommends sqlite3 && \
   rm -rf /var/lib/apt/lists/*
 
-RUN curl -fSsL "https://download.java.net/java/GA/jdk23.0.1/c28985cbf10d4e648e4004050f8781aa/11/GPL/openjdk-23.0.1_linux-x64_bin.tar.gz" -o /tmp/openjdk23.tar.gz && \
-  mkdir /usr/local/openjdk23 && \
-  tar -xf /tmp/openjdk23.tar.gz -C /usr/local/openjdk23 --strip-components=1 && \
-  rm /tmp/openjdk23.tar.gz && \
-  ln -s /usr/local/openjdk23/bin/javac /usr/local/bin/javac && \
-  ln -s /usr/local/openjdk23/bin/java /usr/local/bin/java && \
-  ln -s /usr/local/openjdk23/bin/jar /usr/local/bin/jar
+ENV JAVA_CORRETTO_VERSIONS="21 22 23"
+RUN /usr/local/bin/scripts/install-java-corretto.sh "$JAVA_CORRETTO_VERSIONS"
 
 RUN set -xe && \
   apt-get update && \
@@ -113,15 +97,8 @@ RUN set -xe \
   && ln -s /usr/bin/octave-cli /usr/local/octave-${OCTAVE_VERSION}/bin/octave-cli
 ENV PATH="/usr/local/octave-${OCTAVE_VERSION}/bin:$PATH"
 
-ENV GPROLOG_VERSION=1.5.0
-RUN set -xe \
-  && apt-get update \
-  && apt-get install -y --no-install-recommends \
-  gprolog \
-  # Create version-specific directory and symlinks
-  && mkdir -p /usr/local/gprolog-${GPROLOG_VERSION}/bin \
-  && ln -s /usr/lib/gprolog/bin/gplc /usr/local/gprolog-${GPROLOG_VERSION}/bin/gplc \
-  && ln -s /usr/lib/gprolog/bin/gprolog /usr/local/gprolog-${GPROLOG_VERSION}/bin/gprolog
+ENV GPROLOG_VERSIONS="1.4.5.0-3"
+RUN /usr/local/bin/scripts/install-gprolog.sh "$GPROLOG_VERSIONS"
 ENV PATH="/usr/local/gprolog-${GPROLOG_VERSION}/bin:$PATH"
 
 ENV FPC_VERSION=3.2.2 
@@ -186,24 +163,9 @@ RUN set -xe && \
   rm -rf /tmp/*; \
   done
 
-ENV NASM_VERSIONS \
-  2.16.03
-RUN set -xe && \
-  for VERSION in $NASM_VERSIONS; do \
-  curl -fSsL "https://www.nasm.us/pub/nasm/releasebuilds/$VERSION/nasm-$VERSION.tar.gz" -o /tmp/nasm-$VERSION.tar.gz && \
-  mkdir /tmp/nasm-$VERSION && \
-  tar -xf /tmp/nasm-$VERSION.tar.gz -C /tmp/nasm-$VERSION --strip-components=1 && \
-  rm /tmp/nasm-$VERSION.tar.gz && \
-  cd /tmp/nasm-$VERSION && \
-  ./configure \
-  --prefix=/usr/local/nasm-$VERSION && \
-  make -j$(nproc) nasm ndisasm && \
-  make -j$(nproc) strip && \
-  make -j$(nproc) install && \
-  echo "/usr/local/nasm-$VERSION/bin/nasm -o main.o \$@ && ld main.o" >> /usr/local/nasm-$VERSION/bin/nasmld && \
-  chmod +x /usr/local/nasm-$VERSION/bin/nasmld && \
-  rm -rf /tmp/*; \
-  done
+ENV NASM_VERSIONS="2.14-1 2.15.05-1 2.16.03-1"
+RUN /usr/local/bin/scripts/install-nasm.sh "$NASM_VERSIONS"
+RUN /usr/local/bin/scripts/install-gcc.sh
 
 ENV SWIFT_VERSIONS \
   6.0.1
@@ -373,4 +335,4 @@ LABEL version="1.4.0"
 # Hunched over in apathetic grief with a disregard for steps except the one taken back.
 # Perched up on a rope crafted in smoke, a sword wielding death that buried your hope.
 # Focusing on light through the blinds, a slave to reality under a monarch in the sky.
-# Lost in the patterns of youth where the windows shine brightly back at you.
+# Lost in the patterns of youth where the windows shine brightly back at you.x

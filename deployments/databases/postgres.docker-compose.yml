@@ -28,7 +28,6 @@ services:
         REPMGR_PORT_NUMBER: 5432
       networks:
         - database_bridge
-        - cansu_dev_code_judge0_bridge
         - replica_bridge
   pg-1:
       image: docker.io/bitnami/postgresql-repmgr:16
@@ -45,7 +44,6 @@ services:
         REPMGR_PORT_NUMBER: 5432
       networks:
         - database_bridge
-        - cansu_dev_code_judge0_bridge
         - replica_bridge
   pgpool:
         image: bitnami/pgpool:4
@@ -71,13 +69,10 @@ services:
           retries: 5
         networks:
           - database_bridge
-          - cansu_dev_code_judge0_bridge
           - replica_bridge
 
 networks:
   database_bridge:
-    external: true
-  cansu_dev_code_judge0_bridge:
     external: true
   replica_bridge:
     driver: bridge
