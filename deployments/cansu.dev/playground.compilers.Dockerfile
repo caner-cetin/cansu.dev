@@ -288,3 +288,5 @@ RUN curl -fSsL http://ftp.de.debian.org/debian/pool/main/t/time/time_1.9-0.2_amd
   dpkg -i time.deb && \
   apt-get update && \
   rm time.deb
+
+RUN /usr/local/bin/scripts/install-gcc.sh 
