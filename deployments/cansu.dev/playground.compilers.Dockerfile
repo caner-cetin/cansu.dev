@@ -1,5 +1,5 @@
 FROM debian:sid-slim
-RUN apt-get update 
+RUN apt-get update
 RUN apt-get install -y --no-install-recommends \
   gnupg2 \
   python3-launchpadlib \
@@ -27,7 +27,7 @@ RUN apt-get install -y --no-install-recommends \
   libcap-dev \
   libtool \
   gettext \
-  make \ 
+  make \
   git \
   unixodbc-dev \
   xsltproc \
@@ -101,13 +101,13 @@ ENV GPROLOG_VERSIONS="1.4.5.0-3"
 RUN /usr/local/bin/scripts/install-gprolog.sh "$GPROLOG_VERSIONS"
 ENV PATH="/usr/local/gprolog-${GPROLOG_VERSION}/bin:$PATH"
 
-ENV FPC_VERSION=3.2.2 
+ENV FPC_VERSION=3.2.2
 RUN apt-get install -y --no-install-recommends fpc-3.2.2  && \
   mkdir -p /usr/local/fpc-${FPC_VERSION}/bin && \
   ln -s /usr/bin/x86_64-linux-gnu-fpc-3.2.2 /usr/local/fpc-${FPC_VERSION}/bin/fpc
 ENV PATH="/usr/local/fpc-${FPC_VERSION}/bin:$PATH"
 
-ENV COBOL_VERSION=3.1.2 
+ENV COBOL_VERSION=3.1.2
 RUN set -xe \
   && apt-get update \
   && apt-get install -y --no-install-recommends \
@@ -121,11 +121,10 @@ ENV PATH="/usr/local/gnucobol-${COBOL_VERSION}/bin:$PATH"
 RUN set -xe && \
   apt-get update && \
   apt-get install -y --no-install-recommends \
-  ruby 
+  ruby
 
 RUN apt-get update && apt-get install -y libxml2-dev libsqlite3-dev libcurl4-openssl-dev libgd-dev libonig-dev libzip-dev libpq-dev libmysql++-dev
-ENV PHP_VERSIONS \
-  8.3.13
+ENV PHP_VERSIONS 8.3.13
 RUN set -xe && \
   apt-get update && \
   apt-get install -y --no-install-recommends bison re2c && \
@@ -147,8 +146,7 @@ RUN set -xe && \
 ENV NASM_VERSIONS="2.16.03-1"
 RUN /usr/local/bin/scripts/install-nasm.sh "$NASM_VERSIONS"
 
-ENV SWIFT_VERSIONS \
-  6.0.1
+ENV SWIFT_VERSIONS 6.0.1
 RUN set -xe && \
   rm -rf /var/lib/apt/lists/* && \
   for VERSION in $SWIFT_VERSIONS; do \
@@ -200,7 +198,7 @@ RUN asdf plugin-add python  https://github.com/asdf-community/asdf-python.git   
   asdf plugin-add dotnet  https://github.com/hensou/asdf-dotnet               && \
   asdf plugin-add groovy  https://github.com/weibemoura/asdf-groovy.git       && \
   asdf plugin-add julia   https://github.com/rkyleg/asdf-julia.git            && \
-  asdf plugin add nim     https://github.com/asdf-community/asdf-nim        
+  asdf plugin add nim     https://github.com/asdf-community/asdf-nim
 
 
 # ctrl f is your friend
@@ -269,7 +267,7 @@ RUN asdf install perl ${PERL_VERSION} && \
   asdf global perl ${PERL_VERSION} && \
   asdf reshim perl ${PERL_VERSION}
 
-ENV DOTNET_VERSION=8.0.403 
+ENV DOTNET_VERSION=8.0.403
 RUN asdf install dotnet ${DOTNET_VERSION} && \
   asdf global dotnet ${DOTNET_VERSION} && \
   asdf reshim dotnet ${DOTNET_VERSION}
@@ -289,4 +287,15 @@ RUN curl -fSsL http://ftp.de.debian.org/debian/pool/main/t/time/time_1.9-0.2_amd
   apt-get update && \
   rm time.deb
 
-RUN /usr/local/bin/scripts/install-gcc.sh 
+RUN /usr/local/bin/scripts/install-gcc.sh
+RUN curl -fSsl http://ftp.de.debian.org/debian/pool/main/b/bc/bc_1.07.1-4_amd64.deb -o bc.deb && \
+    dpkg -i bc.deb && \
+    apt-get update && \
+    rm bc.deb
+
+RUN mkdir -p /tmp && \
+    touch /tmp/cpu_stats.log && \
+    touch /tmp/stderr.log && \
+    touch /tmp/timing_stats.log && \
+    touch /tmp/debug.log && \
+    find /tmp -type f -exec chmod 644 {} \;
