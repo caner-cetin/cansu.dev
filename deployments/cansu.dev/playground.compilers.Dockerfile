@@ -265,7 +265,8 @@ RUN asdf install bun ${BUN_VERSION} && \
 ENV PERL_VERSION=5.40.0
 RUN asdf install perl ${PERL_VERSION} && \
   asdf global perl ${PERL_VERSION} && \
-  asdf reshim perl ${PERL_VERSION}
+  asdf reshim perl ${PERL_VERSION} && \
+  ASDF_PERL_VERSION=5.40.0 asdf exec cpanm Unix::Getrusage
 
 ENV DOTNET_VERSION=8.0.403
 RUN asdf install dotnet ${DOTNET_VERSION} && \
