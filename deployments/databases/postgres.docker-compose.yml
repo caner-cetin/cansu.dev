@@ -1,82 +1,80 @@
 name: databases-psql
 x-pgcommon-env: &pg-common-env
-  POSTGRESQL_DATABASE: ${POSTGRESQL_DB}
-  POSTGRESQL_POSTGRES_PASSWORD: ${POSTGRESQL_POSTGRES_PASSWORD}
-  POSTGRESQL_USERNAME: ${POSTGRESQL_USERNAME}
-  POSTGRESQL_PASSWORD: ${POSTGRESQL_PASSWORD}
-  POSTGRESQL_DB: ${POSTGRESQL_DB}
-  POSTGRESQL_NUM_SYNCHRONOUS_REPLICAS: 1
-  REPMGR_USERNAME: ${REPMGR_USERNAME}
-  REPMGR_PASSWORD: ${REPMGR_PASSWORD}
-  REPMGR_PRIMARY_HOST: pg-0
-  REPMGR_PRIMARY_PORT: 5432
-
+    POSTGRESQL_DATABASE: ${POSTGRESQL_DB}
+    POSTGRESQL_POSTGRES_PASSWORD: ${POSTGRESQL_POSTGRES_PASSWORD}
+    POSTGRESQL_USERNAME: ${POSTGRESQL_USERNAME}
+    POSTGRESQL_PASSWORD: ${POSTGRESQL_PASSWORD}
+    POSTGRESQL_DB: ${POSTGRESQL_DB}
+    POSTGRESQL_NUM_SYNCHRONOUS_REPLICAS: 1
+    REPMGR_USERNAME: ${REPMGR_USERNAME}
+    REPMGR_PASSWORD: ${REPMGR_PASSWORD}
+    REPMGR_PRIMARY_HOST: pg-0
+    REPMGR_PRIMARY_PORT: 5432
 
 services:
-  pg-0:
-      image: docker.io/bitnami/postgresql-repmgr:16
-      restart: always
-      ports:
-        - 5432
-      volumes:
-        - pg_0_data:/bitnami/postgresql
-      environment: 
-        <<: *pg-common-env
-        REPMGR_PARTNER_NODES: pg-1,pg-0
-        REPMGR_NODE_NAME: pg-0
-        REPMGR_NODE_NETWORK_NAME: pg-0
-        REPMGR_PORT_NUMBER: 5432
-      networks:
-        - database_bridge
-        - replica_bridge
-  pg-1:
-      image: docker.io/bitnami/postgresql-repmgr:16
-      restart: always
-      ports:
-        - 5432
-      volumes:
-        - pg_1_data:/bitnami/postgresql
-      environment:
-        <<: *pg-common-env
-        REPMGR_PARTNER_NODES: pg-0,pg-1
-        REPMGR_NODE_NAME: pg-1
-        REPMGR_NODE_NETWORK_NAME: pg-1
-        REPMGR_PORT_NUMBER: 5432
-      networks:
-        - database_bridge
-        - replica_bridge
-  pgpool:
+    pg-0:
+        image: docker.io/bitnami/postgresql-repmgr:16
+        restart: always
+        ports:
+            - 5432
+        volumes:
+            - pg_0_data:/bitnami/postgresql
+        environment:
+            <<: *pg-common-env
+            REPMGR_PARTNER_NODES: pg-1,pg-0
+            REPMGR_NODE_NAME: pg-0
+            REPMGR_NODE_NETWORK_NAME: pg-0
+            REPMGR_PORT_NUMBER: 5432
+        networks:
+            - database_bridge
+            - replica_bridge
+    pg-1:
+        image: docker.io/bitnami/postgresql-repmgr:16
+        restart: always
+        ports:
+            - 5432
+        volumes:
+            - pg_1_data:/bitnami/postgresql
+        environment:
+            <<: *pg-common-env
+            REPMGR_PARTNER_NODES: pg-0,pg-1
+            REPMGR_NODE_NAME: pg-1
+            REPMGR_NODE_NETWORK_NAME: pg-1
+            REPMGR_PORT_NUMBER: 5432
+        networks:
+            - database_bridge
+            - replica_bridge
+    pgpool:
         image: bitnami/pgpool:4
         restart: always
         ports:
-          - 5432:5432
+            - 5432:5432
         environment:
-          - PGPOOL_BACKEND_NODES=0:pg-0:5432,1:pg-1:5432
-          - PGPOOL_SR_CHECK_USER=${REPMGR_USERNAME}
-          - PGPOOL_SR_CHECK_PASSWORD=${REPMGR_PASSWORD}
-          - PGPOOL_ENABLE_LDAP=no
-          - PGPOOL_POSTGRES_USERNAME=postgres
-          - PGPOOL_POSTGRES_PASSWORD=${POSTGRESQL_POSTGRES_PASSWORD}
-          - PGPOOL_ADMIN_USERNAME=admin
-          - PGPOOL_ADMIN_PASSWORD=${POSTGRESQL_POSTGRES_PASSWORD}
-          - PGPOOL_ENABLE_LOAD_BALANCING=yes
-          - PGPOOL_POSTGRES_CUSTOM_USERS=${POSTGRESQL_ALL_USERNAMES}
-          - PGPOOL_POSTGRES_CUSTOM_PASSWORDS=${POSTGRESQL_ALL_PASSWORDS}
+            - PGPOOL_BACKEND_NODES=0:pg-0:5432,1:pg-1:5432
+            - PGPOOL_SR_CHECK_USER=${REPMGR_USERNAME}
+            - PGPOOL_SR_CHECK_PASSWORD=${REPMGR_PASSWORD}
+            - PGPOOL_ENABLE_LDAP=no
+            - PGPOOL_POSTGRES_USERNAME=postgres
+            - PGPOOL_POSTGRES_PASSWORD=${POSTGRESQL_POSTGRES_PASSWORD}
+            - PGPOOL_ADMIN_USERNAME=admin
+            - PGPOOL_ADMIN_PASSWORD=${POSTGRESQL_POSTGRES_PASSWORD}
+            - PGPOOL_ENABLE_LOAD_BALANCING=yes
+            - PGPOOL_POSTGRES_CUSTOM_USERS=${POSTGRESQL_ALL_USERNAMES}
+            - PGPOOL_POSTGRES_CUSTOM_PASSWORDS=${POSTGRESQL_ALL_PASSWORDS}
         healthcheck:
-          test: ["CMD", "/opt/bitnami/scripts/pgpool/healthcheck.sh"]
-          interval: 10s
-          timeout: 5s
-          retries: 5
+            test: ["CMD", "/opt/bitnami/scripts/pgpool/healthcheck.sh"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
         networks:
-          - database_bridge
-          - replica_bridge
-
+            - database_bridge
+            - replica_bridge
 networks:
-  database_bridge:
-    external: true
-  replica_bridge:
-    driver: bridge
+    database_bridge:
+        external: true
+    replica_bridge:
+        driver: bridge
 
 volumes:
-  pg_1_data:
-  pg_0_data:
+    pg_1_data:
+    pg_0_data:

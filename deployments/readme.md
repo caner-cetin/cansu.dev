@@ -12,7 +12,7 @@ docker network create plane-dev
 ### config
 #### .env
 ```bash
-POSTGRESQL_POSTGRES_PASSWORD= 
+POSTGRESQL_POSTGRES_PASSWORD=
 POSTGRESQL_PSQL_URL=
 POSTGRESQL_USERNAME=
 POSTGRESQL_PASSWORD=
@@ -35,32 +35,65 @@ REPMGR_PASSWORD=
 # cansu.dev/dj
 UPLOAD_ADMIN_USERNAME=
 UPLOAD_ADMIN_PASSWORD=
-S3_ACCOUNT_ID=
-S3_ACCESS_KEY_ID=
-S3_ACCESS_KEY_SECRET=
 
 # dynamic ports
 PLANE_PROXY_PORT=
 PLANE_CONTROLLER_PORT=
+
+# required for postgres backups
+#
+# for wal-g, any s3 compatible service works, minio, r2, etc.
+# i have configured it to use with R2, but if you want you can use Azure, GCS, SSH, local filesystem (dont, seperate your backups with server please)
+# check => https://github.com/wal-g/wal-g/blob/master/docs/STORAGES.md and the docker compose
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+WALG_S3_PREFIX=
+AWS_ENDPOINT=
+AWS_S3_FORCE_PATH_STYLE=
+AWS_REGION=
 ```
 #### config.monitoring
 ```bash
 GF_SECURITY_ADMIN_PASSWORD=
 GF_USERS_ALLOW_SIGN_UP=false
 GF_PATHS_PROVISIONING=/etc/grafana/provisioning
-GF_INSTALL_PLUGINS=https://storage.googleapis.com/integration-artifacts/grafana-lokiexplore-app/grafana-lokiexplore-app-latest.zip;grafana-lokiexplore-app 
+GF_INSTALL_PLUGINS=https://storage.googleapis.com/integration-artifacts/grafana-lokiexplore-app/grafana-lokiexplore-app-latest.zip;grafana-lokiexplore-app
 ```
 ### run
 ```bash
 # ====== common services ===
 # => 1 replica 1 primary and 1 pgpool instances for postgres 16
 # => dragonfly
-# => monitoring stack with 
+# => monitoring stack with
 # ==> grafana as dashboard
 # ==> prometheus&cadvisor and loki&promtail as datasources
 # ==> alert manager
 # ==========================
+#
+# before launching the postgres container, modify the ofeliea (submodule) dockerfile first
+# go into ofelia/Dockerfile and change
+#
+# FROM golang:1.22-alpine AS builder => FROM golang:1.22-bookworm AS builder
+# FROM alpine:3.20 => FROM debian:bookworm
+#
+# and then build with
+#
+# cd ofelia
+# docker build . -t ofelia-debian
+#
+# then run the docker compose. keep reading if you wonder why we do this.
+#
+#
+# ofelia is based on alpine to be lightweight but, musl is a guaranteed pain in the ass and the tradeoff is definitely not worth it.
+# what is the problem? alpine is the problem. you can run tasks with ofelia either
+# 1. using an image
+# 2. using an already running container
+# 3. using the ofelia host itself
+# i prefer to run everything inside the ofelia as it is the easiest, and, wal-g does not have musl/Alpine builds.
+# not just wal-g, almost everything must be built from source on alpine and i seriously dont want hassle just to save 60 MB on a system that has 200 GB free space.
+# this one is a good read https://pythonspeed.com/articles/alpine-docker-python/
 docker compose -f databases/postgres.docker-compose.yml   --env-file .env up -d
+docker compose -f databases/scheduler.docker-compose.yml  --env-file .env up -d
 docker compose -f databases/redis.docker-compose.yml      --env-file .env up -d
 docker compose -f monitoring/docker-compose.yml           --env-file .env up -d
 # ===== code.cansu.dev =======

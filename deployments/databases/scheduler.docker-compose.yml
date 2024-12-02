@@ -1,0 +1,36 @@
+name: databases-scheduler
+x-pgcommon-env: &pg-common-env # WAL-G configurations
+    AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+    AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+    WALG_S3_PREFIX: ${WALG_S3_PREFIX}
+    AWS_ENDPOINT: ${AWS_ENDPOINT}
+    AWS_REGION: ${AWS_REGION}
+    # Enable WAL archiving
+    POSTGRESQL_WAL_LEVEL: replica
+    POSTGRESQL_ARCHIVE_MODE: on
+    POSTGRESQL_ARCHIVE_COMMAND: "wal-g wal-push %p"
+    POSTGRESQL_RESTORE_COMMAND: "wal-g wal-fetch %f %p"
+
+    PGHOST: pgpool
+    PGPORT: 5432
+    PGUSER: postgres
+    PGPASSWORD: ${POSTGRESQL_POSTGRES_PASSWORD}
+    PGSSLMODE: disable
+
+services:
+    backup:
+        build:
+            context: .
+            dockerfile: scheduler.Dockerfile
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+            - ./backup/config.ini:/etc/ofelia/config.ini
+        networks:
+            - database_bridge
+        environment:
+            <<: *pg-common-env
+            PGDATABASE: playground
+
+networks:
+    database_bridge:
+        external: true

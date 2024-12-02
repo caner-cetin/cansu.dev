@@ -10,3 +10,6 @@
 [submodule "deployments/plane"]
 	path = deployments/plane
 	url = https://github.com/jamsocket/plane.git
+[submodule "deployments/ofelia"]
+	path = deployments/ofelia
+	url = https://github.com/mcuadros/ofelia.git
