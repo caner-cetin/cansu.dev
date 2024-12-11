@@ -13,3 +13,6 @@
 [submodule "deployments/ofelia"]
 	path = deployments/ofelia
 	url = https://github.com/mcuadros/ofelia.git
+[submodule "main"]
+	path = main
+	url = https://github.com/caner-cetin/cansu-dev-main.git
