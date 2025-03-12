@@ -19,7 +19,8 @@ services:
         getent passwd static_cansu_dev_user || useradd -r -g static_cansu_dev_group -d /var/www/servers/cansu.dev/static/ -s /usr/sbin/nologin static_cansu_dev_user
         
         mkdir -p /var/log/lighttpd
-        chown static_cansu_dev_user:static_cansu_dev_group /var/log/lighttpd
+        chown -R static_cansu_dev_user:static_cansu_dev_group /var/log/lighttpd
+        chmod -R 755 /var/log/lighttpd
         
         touch /etc/lighttpd/lighttpd-htpasswd
         
