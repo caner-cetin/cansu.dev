@@ -13,4 +13,4 @@ sudo chown -R static_cansu_dev_user:static_cansu_dev_group ./logs
 sudo chmod -R 755 ./logs
 
 echo "permissions have been set up. you can now start the docker container."
-echo "run: docker-compose up -d"
+echo "run: docker compose up -d"
