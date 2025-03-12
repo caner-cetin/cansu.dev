@@ -129,6 +129,7 @@ def generate_css(unicodes, font_name, prefix="devicon"):
         {"class": "devicon-sqlite-plain", "name": "sqlite"},
         {"class": "devicon-git-plain", "name": "git"},
         {"class": "devicon-amazonwebservices-original", "name": "aws"},
+        {"class": "devicon-cplusplus-plain", "name": "cpp"},
     ]
 
     for i, icon in enumerate(icons):
@@ -157,6 +158,7 @@ if __name__ == "__main__":
         "EC1E",  # sqlite
         "EA2D",  # git
         "E90C",  # aws
+        "E99A",  # cpp
     ]
     # Get unicode values and glyph names
     unicodes, glyph_names = get_unicode_values(input_font, unicodes)

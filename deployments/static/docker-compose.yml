@@ -1,0 +1,30 @@
+version: "3.8"
+services:
+  file-server:
+    image: alpine:latest
+    command: /usr/sbin/lighttpd -D -f /etc/lighttpd/lighttpd.conf
+    volumes:
+      - /var/www/servers/cansu.dev/static/:/var/www/servers/cansu.dev/static/:ro
+      - ./lighttpd.conf:/etc/lighttpd/lighttpd.conf:ro
+      - ./logs:/var/log/lighttpd
+    ports:
+      - "44444:80"
+    restart: unless-stopped
+    init: true
+    entrypoint: |
+      /bin/sh -c "
+        apk add --no-cache lighttpd shadow
+        
+        groupadd static_cansu_dev_group
+        useradd -r -g static_cansu_dev_group -d /var/www/servers/cansu.dev/static/ -s /sbin/nologin static_cansu_dev_user
+        
+        mkdir -p /var/log/lighttpd
+        chown static_cansu_dev_user:static_cansu_dev_group /var/log/lighttpd
+        
+        chown -R static_cansu_dev_user:static_cansu_dev_group /var/www/servers/cansu.dev/static/
+        chmod -R 550 /var/www/servers/cansu.dev/static/
+
+        touch /etc/lighttpd/lighttpd-htpasswd
+        
+        exec $$0 $$@
+      "
