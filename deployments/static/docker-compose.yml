@@ -3,7 +3,7 @@ services:
     image: debian:sid-slim
     command: /usr/sbin/lighttpd -D -f /etc/lighttpd/lighttpd.conf
     volumes:
-      - static_content:/var/www/servers/cansu.dev/static/:ro
+      - static_content:/var/www/servers/cansu.dev/static/
       - ./lighttpd.conf:/etc/lighttpd/lighttpd.conf:ro
       - ./logs:/var/log/lighttpd
     ports:
@@ -21,6 +21,9 @@ services:
         mkdir -p /var/log/lighttpd
         chown -R static_cansu_dev_user:static_cansu_dev_group /var/log/lighttpd
         chmod -R 755 /var/log/lighttpd
+
+        chown -R static_cansu_dev_user:static_cansu_dev_group /var/www/servers/cansu.dev/static/
+        chmod -R 755 /var/www/servers/cansu.dev/static/
         
         touch /etc/lighttpd/lighttpd-htpasswd
         
