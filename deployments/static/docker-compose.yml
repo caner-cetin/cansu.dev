@@ -1,6 +1,6 @@
 services:
   file-server:
-    image: debian:slim
+    image: debian:sid-slim
     command: /usr/sbin/lighttpd -D -f /etc/lighttpd/lighttpd.conf
     volumes:
       - static_content:/var/www/servers/cansu.dev/static/:ro
