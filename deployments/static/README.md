@@ -2,6 +2,8 @@ configuration files for `https://static.cansu.dev`
 
 ### run
 ```bash
+chmod +x setup-permissions.sh
+./setup-permissions.sh
 docker compose up -d
 # ready to go at 44444 port
 #
@@ -24,6 +26,7 @@ docker compose up -d
 # then check if config is correct
 lighttpd -tt -f lighttpd.conf
 # add a new user
+chmod +x ./add-user.sh
 ./add-user.sh admin secretpassword
 # then reload the lighttpd
 docker exec file-server kill -s HUP 1
