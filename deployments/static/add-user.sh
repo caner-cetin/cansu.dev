@@ -12,6 +12,3 @@ CONTAINER_NAME="file-server"  # change this if you renamed service in docker-com
 docker exec "$CONTAINER_NAME" sh -c "apt-get install -y apache2-utils && htpasswd -b /etc/lighttpd/lighttpd-htpasswd '$USERNAME' '$PASSWORD'"
 docker exec "$CONTAINER_NAME" chown static_cansu_dev_user:static_cansu_dev_group /etc/lighttpd/lighttpd-htpasswd
 docker exec "$CONTAINER_NAME" chmod 750 /etc/lighttpd/lighttpd-htpasswd
-
-echo "user '$USERNAME' has been added to the password file."
-echo "remember to restart lighttpd with: docker exec $CONTAINER_NAME kill -s HUP 1"
