@@ -1,13 +1,18 @@
-DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
-                    Version 2, December 2004
+The Push-Up License (PUL)
 
- Copyright (C) 2004 Sam Hocevar <sam@hocevar.net>
+Copyright (c) 2025 [Caner Cetin]
+Using the Push-Up License (PUL) format created by PizzaTowerFanGD (2024)
 
- Everyone is permitted to copy and distribute verbatim or modified
- copies of this license document, and changing it is allowed as long
- as the name is changed.
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
-            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
-   TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+Push-Up Clause: Any person who copies the Software, in whole or in part, must perform one (1) push-up. This is a binding and non-transferable requirement. The push-up must be executed to the best of the individual's ability and in good faith.
 
-  0. You just DO WHAT THE FUCK YOU WANT TO.
+The above push-up requirement shall not apply to:
+
+Automated systems performing copies as part of standard backup processes.
+Individuals with physical disabilities or medical conditions preventing them from performing push-ups, in which case this clause is waived.
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+By copying this Software, you acknowledge and agree to the Push-Up Clause and pledge to uphold the spirit of fitness and fun.
