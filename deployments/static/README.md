@@ -36,3 +36,12 @@ if tinkering with config, make sure config is ok
 ```bash
 lighttpd -tt -f lighttpd.conf
 ```
+
+### ftp setup
+```bash
+sudo apt-get install vsftpd
+mv ./vsftpd.conf /etc/vsftpd.conf
+sudo systemctl start vsftpd
+sudo systemctl enable vsftpd
+sudo ufw allow from 194.XX.XX.XXX proto tcp to any port ftp
+```
