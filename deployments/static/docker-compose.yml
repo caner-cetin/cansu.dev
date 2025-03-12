@@ -13,7 +13,7 @@ services:
     entrypoint: |
       /bin/sh -c "
         export DEBIAN_FRONTEND=noninteractive
-        apt-get update && apt-get install -y lighttpd
+        apt-get update && apt-get install Dpkg::Options::=--force-confdef -y lighttpd
         
         getent group static_cansu_dev_group || groupadd static_cansu_dev_group
         getent passwd static_cansu_dev_user || useradd -r -g static_cansu_dev_group -d /var/www/servers/cansu.dev/static/ -s /usr/sbin/nologin static_cansu_dev_user
