@@ -99,7 +99,7 @@ docker compose -f databases/postgres.docker-compose.yml   --env-file .env up -d
 docker compose -f databases/scheduler.docker-compose.yml  --env-file .env up -d
 docker compose -f databases/redis.docker-compose.yml      --env-file .env up -d
 docker compose -f monitoring/docker-compose.yml           --env-file .env up -d
-docker compose -f kuma/docker-compose.yml                 --env-file .env up -d
+docker compose -f kuma/docker-compose.yaml                 --env-file .env up -d
 # ===== code.cansu.dev =======
 # => compiler and backend image
 # ============================

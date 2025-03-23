@@ -2,7 +2,7 @@ services:
   uptime:
     image: louislam/uptime-kuma:1
     volumes:
-      - kuma_data
+      - kuma_data:/app/data
     ports:
       - "3001:3001"
     restart: always
