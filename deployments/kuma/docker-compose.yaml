@@ -10,9 +10,12 @@ services:
     networks:
       uptime_bridge:
         ipv4_address: 192.168.90.2
+      database_bridge:
 
 volumes:
   kuma_data:
 networks:
   uptime_bridge:
+    external: true
+  database_bridge:
     external: true
