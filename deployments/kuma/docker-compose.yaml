@@ -8,7 +8,8 @@ services:
     restart: always
     container_name: uptime
     networks:
-      - uptime_bridge
+      uptime_bridge:
+        ipv4_address: 192.168.90.2
 
 volumes:
   kuma_data:

@@ -29,6 +29,8 @@ services:
         
         exec $0 $@
       "
+    networks:
+      - uptime_bridge
 
 volumes:
   static_content:
@@ -37,3 +39,6 @@ volumes:
       type: none
       o: bind
       device: /var/www/servers/cansu.dev/static/
+networks:
+  uptime_bridge:
+    external: true
