@@ -1,6 +1,8 @@
 - [dockercompose](#dockercompose)
   - [networks](#networks)
-  - [.env](#env)
+  - [config](#config)
+    - [.env](#env)
+    - [config.monitoring](#configmonitoring)
   - [run](#run)
 
 ## dockercompose
@@ -8,6 +10,7 @@
 ```bash
 docker network create database_bridge
 docker network create plane-dev
+docker network create uptime_bridge
 ```
 ### config
 #### .env
@@ -96,6 +99,7 @@ docker compose -f databases/postgres.docker-compose.yml   --env-file .env up -d
 docker compose -f databases/scheduler.docker-compose.yml  --env-file .env up -d
 docker compose -f databases/redis.docker-compose.yml      --env-file .env up -d
 docker compose -f monitoring/docker-compose.yml           --env-file .env up -d
+docker compose -f kuma/docker-compose.yml                 --env-file .env up -d
 # ===== code.cansu.dev =======
 # => compiler and backend image
 # ============================
