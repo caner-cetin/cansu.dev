@@ -2,7 +2,7 @@ services:
   file-server:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: nginx.Dockerfile
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
       - ./fancyindex:/var/www/servers/cansu.dev/static/fancyindex:ro
