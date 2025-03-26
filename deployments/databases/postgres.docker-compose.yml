@@ -64,7 +64,8 @@ services:
 
 networks:
   database_bridge:
-    driver: bridge
+    external: true
+
 
 volumes:
   pg_primary_data:
