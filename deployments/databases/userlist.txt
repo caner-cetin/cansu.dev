@@ -1,2 +1,2 @@
-"postgres" "${POSTGRESQL_POSTGRES_PASSWORD}"
-"${POSTGRESQL_USERNAME}" "${POSTGRESQL_PASSWORD}"
+"postgres" "something"
+"dj" "something"
