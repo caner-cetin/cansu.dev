@@ -55,6 +55,9 @@ RUN ./configure \
 RUN rm -rf /tmp/nginx-1.25.3 /tmp/ngx-fancyindex-0.5.2 \
   && rm /tmp/nginx-1.25.3.tar.gz /tmp/v0.5.2.tar.gz
 
+RUN addgroup -g 1337 fileservergroup
+RUN adduser -u 1337 -G fileservergroup -D fileserveruser
+
 COPY nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE 80
