@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Directory Listing</title>
+    <style>
+        :root {
+            --bg-primary: #1f1f29;
+            --bg-secondary: #413a42;
+            --text-primary: #96a2b3;
+            --text-accent: #eaf0d8;
+            --border-color: #596070;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: var(--bg-secondary);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        h1 {
+            color: var(--text-accent);
+            text-align: center;
+            padding: 15px;
+            background-color: var(--bg-primary);
+            margin: 0;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--bg-primary);
+            color: var(--text-accent);
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: rgba(89, 96, 112, 0.2);
+        }
+
+        tr:hover {
+            background-color: rgba(89, 96, 112, 0.4);
+        }
+
+        a {
+            color: var(--text-accent);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: #eaf0d8;
+            text-decoration: underline;
+        }
+
+        .file-icon::before {
+            content: '📄';
+            margin-right: 8px;
+        }
+
+        .dir-icon::before {
+            content: '📁';
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Directory Listing</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Last Modified</th>
+                    <th>Size</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
