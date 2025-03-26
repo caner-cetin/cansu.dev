@@ -2,41 +2,43 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Directory Listing</title>
+    <title>Index</title>
     <style>
         :root {
-            --bg-primary: #1f1f29;
-            --bg-secondary: #413a42;
-            --text-primary: #96a2b3;
-            --text-accent: #eaf0d8;
-            --border-color: #596070;
+            --bg-primary: #f7f0dd;
+            --bg-secondary: #eadcc1;
+            --text-primary: #845640;
+            --text-secondary: #773f35;
+            --border-color: #a07754;
+            --hover-bg: #d6c19d;
         }
 
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg-primary);
             color: var(--text-primary);
             margin: 0;
-            padding: 20px;
-            line-height: 1.6;
+            padding: 15px;
+            line-height: 1.5;
         }
 
         .container {
-            max-width: 900px;
+            max-width: 800px;
             margin: 0 auto;
             background-color: var(--bg-secondary);
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             overflow: hidden;
         }
 
         h1 {
-            color: var(--text-accent);
-            text-align: center;
-            padding: 15px;
-            background-color: var(--bg-primary);
+            color: var(--text-secondary);
+            text-align: left;
+            padding: 10px 15px;
             margin: 0;
-            border-bottom: 2px solid var(--border-color);
+            font-size: 1.2em;
+            font-weight: 500;
+            border-bottom: 1px solid var(--border-color);
         }
 
         table {
@@ -45,33 +47,34 @@
         }
 
         th, td {
-            padding: 12px;
+            padding: 8px 15px;
             text-align: left;
             border-bottom: 1px solid var(--border-color);
         }
 
         th {
             background-color: var(--bg-primary);
-            color: var(--text-accent);
-            font-weight: bold;
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.9em;
         }
 
         tr:nth-child(even) {
-            background-color: rgba(89, 96, 112, 0.2);
+            background-color: rgba(160, 119, 84, 0.1);
         }
 
         tr:hover {
-            background-color: rgba(89, 96, 112, 0.4);
+            background-color: var(--hover-bg);
         }
 
         a {
-            color: var(--text-accent);
+            color: var(--text-secondary);
             text-decoration: none;
-            transition: color 0.3s ease;
+            transition: color 0.2s ease;
         }
 
         a:hover {
-            color: #eaf0d8;
+            color: #773f35;
             text-decoration: underline;
         }
 
@@ -88,7 +91,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Directory Listing</h1>
+        <h1>Index</h1>
         <table>
             <thead>
                 <tr>
@@ -98,4 +101,3 @@
                 </tr>
             </thead>
             <tbody>
-            </tbody>
