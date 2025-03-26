@@ -1,33 +1,44 @@
 services:
   file-server:
-    image: debian:sid-slim
-    command: /usr/sbin/lighttpd -D -f /etc/lighttpd/lighttpd.conf
+    image: nginx:alpine
+    command: nginx -g 'daemon off;'
     volumes:
       - static_content:/var/www/servers/cansu.dev/static/
-      - ./lighttpd.conf:/etc/lighttpd/lighttpd.conf:ro
-      - ./logs:/var/log/lighttpd
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./logs:/var/log/nginx
+      - ./htpasswd:/etc/nginx/htpasswd:ro
     ports:
       - "44444:80"
     restart: unless-stopped
-    init: true
     entrypoint: |
       /bin/sh -c "
-        export DEBIAN_FRONTEND=noninteractive
-        apt-get update && apt-get install -o Dpkg::Options::=--force-confdef -y lighttpd
+        apk update
+        apk upgrade
+        apk add wget
         
-        getent group static_cansu_dev_group || groupadd static_cansu_dev_group
-        getent passwd static_cansu_dev_user || useradd -r -g static_cansu_dev_group -d /var/www/servers/cansu.dev/static/ -s /usr/sbin/nologin static_cansu_dev_user
+        # Create group and user
+        addgroup -S static_cansu_dev_group
+        adduser -S -D -g static_cansu_dev_group -h /var/www/servers/cansu.dev/static/ -s /sbin/nologin static_cansu_dev_user
         
-        mkdir -p /var/log/lighttpd
-        chown -R static_cansu_dev_user:static_cansu_dev_group /var/log/lighttpd
-        chmod -R 755 /var/log/lighttpd
-
+        # Set proper permissions
         chown -R static_cansu_dev_user:static_cansu_dev_group /var/www/servers/cansu.dev/static/
         chmod -R 755 /var/www/servers/cansu.dev/static/
+      
+        wget https://raw.githubusercontent.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/master/bots.d/blockbots.conf -O /etc/nginx/bots.d/blockbots.conf 
+        wget https://raw.githubusercontent.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/master/bots.d/ddos.conf -O /etc/nginx/bots.d/ddos.conf
+        wget https://raw.githubusercontent.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/master/conf.d/globalblacklist.conf -O /etc/nginx/conf.d/globalblacklist.conf
+        wget https://raw.githubusercontent.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/master/bots.d/blacklist-user-agents.conf -O /etc/nginx/bots.d/blacklist-user-agents.conf
+        wget https://raw.githubusercontent.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/master/bots.d/custom-bad-referrers.conf -O /etc/nginx/bots.d/custom-bad-referrers.conf
+        wget https://raw.githubusercontent.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/master/bots.d/blacklist-ips.conf -O /etc/nginx/bots.d/blacklist-ips.conf
+        wget https://raw.githubusercontent.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/master/bots.d/bad-referrer-words.conf -O /etc/nginx/bots.d/bad-referrer-words.conf
+        wget https://raw.githubusercontent.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/master/conf.d/botblocker-nginx-settings.conf -O /etc/nginx/conf.d/botblocker-nginx-settings.conf
+
+
+        chown -R static_cansu_dev_user:static_cansu_dev_group /var/log/nginx
+        chmod -R 755 /var/log/nginx
         
-        touch /etc/lighttpd/lighttpd-htpasswd
-        
-        exec $0 $@
+        # Start nginx
+        exec nginx -g 'daemon off;'
       "
     networks:
       - uptime_bridge
@@ -39,6 +50,7 @@ volumes:
       type: none
       o: bind
       device: /var/www/servers/cansu.dev/static/
+
 networks:
   uptime_bridge:
     external: true
