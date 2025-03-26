@@ -1,5 +1,4 @@
 version: "3.8"
-
 services:
   pg-primary:
     image: postgres:16

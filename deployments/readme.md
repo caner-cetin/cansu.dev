@@ -1,9 +1,15 @@
+- [updates](#updates)
 - [dockercompose](#dockercompose)
   - [networks](#networks)
   - [config](#config)
     - [.env](#env)
     - [config.monitoring](#configmonitoring)
   - [run](#run)
+
+
+## updates
+
+currently writing a small CLI for running services using 1password. wip.
 
 ## dockercompose
 ### networks
