@@ -4,6 +4,7 @@ services:
     volumes:
       - static_content:/var/www/servers/cansu.dev/static/
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./conf/bots.d:/etc/nginx/bots.d
       - ./logs:/var/log/nginx
       - ./htpasswd:/etc/nginx/htpasswd:ro
       - ./setup.sh:/docker-entrypoint.d/50-setup.sh
