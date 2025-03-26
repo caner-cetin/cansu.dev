@@ -95,7 +95,7 @@ GF_INSTALL_PLUGINS=https://storage.googleapis.com/integration-artifacts/grafana-
 # i prefer to run everything inside the ofelia as it is the easiest, and, wal-g does not have musl/Alpine builds.
 # not just wal-g, almost everything must be built from source on alpine and i seriously dont want hassle just to save 60 MB on a system that has 200 GB free space.
 # this one is a good read https://pythonspeed.com/articles/alpine-docker-python/
-docker compose -f databases/postgres.docker-compose.yml   --env-file .env up -d
+docker compose -f databases/postgres.docker-compose.yml   --env-file .env up -d # modify userlist.txt for more users
 docker compose -f databases/scheduler.docker-compose.yml  --env-file .env up -d
 docker compose -f databases/redis.docker-compose.yml      --env-file .env up -d
 docker compose -f monitoring/docker-compose.yml           --env-file .env up -d
