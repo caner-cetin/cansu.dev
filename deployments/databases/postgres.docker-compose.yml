@@ -52,7 +52,7 @@ services:
       - 6432:6432
     volumes:
       - ./pgbouncer.ini:/etc/pgbouncer/pgbouncer.ini
-      - ./userlist.txt:/etc/pgbouncer/userlist.txt
+      - ./userlist.txt:/pgbouncer/userlist.txt
     environment:
       - DB_HOST=pg-primary
       - DB_USER=${POSTGRESQL_USERNAME}
@@ -65,7 +65,6 @@ services:
 networks:
   database_bridge:
     external: true
-
 
 volumes:
   pg_primary_data:
