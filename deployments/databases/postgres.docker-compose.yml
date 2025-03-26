@@ -1,35 +1,50 @@
 version: "3.8"
 
-x-postgres-common: &postgres-common
-  POSTGRES_DB: ${POSTGRESQL_DB}
-  POSTGRES_USER: ${POSTGRESQL_USERNAME}
-  POSTGRES_PASSWORD: ${POSTGRESQL_PASSWORD}
-  REPLICATION_MODE: replica
-  REPLICATION_USER: ${REPMGR_USER}
-  REPLICATION_PASSWORD: ${REPMGR_PASSWORD}
-
 services:
   pg-primary:
-    image: docker.io/bitnami/postgresql:16
+    image: postgres:16
     volumes:
-      - pg_primary_data:/bitnami/postgresql/data
+      - pg_primary_data:/var/lib/postgresql/data
     environment:
-      <<: *postgres-common
-      REPLICATION_MODE: master
+      POSTGRES_DB: ${POSTGRESQL_DB}
+      POSTGRES_USER: ${POSTGRESQL_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRESQL_PASSWORD}
+      POSTGRES_HOST_AUTH_METHOD: scram-sha-256
+      POSTGRES_REPLICATION_USER: ${REPMGR_USERNAME}
+      POSTGRES_REPLICATION_PASSWORD: ${REPMGR_PASSWORD}
+    ports:
+      - "5432:5432" #expose primary port for pgbouncer
+    command:
+      [
+        "-c",
+        "wal_level=replica",
+        "-c",
+        "max_wal_senders=10",
+        "-c",
+        "max_replication_slots=10",
+      ]
     networks:
-      - database_network
+      - database_bridge
 
   pg-replica:
-    image: docker.io/bitnami/postgresql:16
+    image: postgres:16
     volumes:
-      - pg_replica_data:/bitnami/postgresql/data
+      - pg_replica_data:/var/lib/postgresql/data
     environment:
-      <<: *postgres-common
-      REPLICATION_PRIMARY_HOST: pg-primary
+      POSTGRES_DB: ${POSTGRESQL_DB}
+      POSTGRES_USER: ${POSTGRESQL_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRESQL_PASSWORD}
+      POSTGRES_HOST_AUTH_METHOD: scram-sha-256
+      PGDATA: /var/lib/postgresql/data
+    command:
+      [
+        "-c",
+        "primary_conninfo=host=pg-primary port=5432 user=${REPMGR_USERNAME} password=${REPMGR_PASSWORD} application_name=pg_replica",
+      ]
     depends_on:
       - pg-primary
     networks:
-      - database_network
+      - database_bridge
 
   pgbouncer:
     image: edoburu/pgbouncer:latest
@@ -43,13 +58,12 @@ services:
       - DB_USER=${POSTGRESQL_USERNAME}
       - DB_PASSWORD=${POSTGRESQL_PASSWORD}
     networks:
-      - database_network
+      - database_bridge
     depends_on:
       - pg-primary
-      - pg-replica
 
 networks:
-  database_network:
+  database_bridge:
     driver: bridge
 
 volumes:
