@@ -158,7 +158,7 @@ GRANT EXECUTE ON FUNCTION public.lookup(name) TO %s;
 			AttachStdin:  false,
 
 			OpenStdin: false,
-			Image:     "postgres:latest",
+			Image:     "postgres:16",
 			Cmd: []string{
 				"-c",
 				"wal_level=replica",
@@ -230,7 +230,7 @@ func (c *postgresCredentials) startReplica(app *AppCtx, networks map[string]*net
 			AttachStderr: true,
 			AttachStdin:  false,
 			OpenStdin:    false,
-			Image:        "postgres:latest",
+			Image:        "postgres:16",
 			Cmd: []string{
 				"-c",
 				"wal_level=replica",
@@ -265,7 +265,7 @@ func (c *postgresCredentials) startReplica(app *AppCtx, networks map[string]*net
 	if err != nil {
 		return err
 	}
-	
+
 	err = app.Docker.ContainerStart(app.Context, response.ID, container.StartOptions{})
 	if err != nil {
 		return err
@@ -338,7 +338,7 @@ func (c *postgresCredentials) startBouncer(app *AppCtx, networks map[string]*net
 		return err
 	}
 	save_user_list, err := app.Docker.ContainerExecCreate(app.Context, response.ID, container.ExecOptions{
-		Cmd: []string{"/bin/sh", "-c", fmt.Sprintf("echo '%s \"\"' > /etc/pgbouncer/userlist.txt", c.Bouncer.User)},
+		Cmd: []string{"/bin/sh", "-c", fmt.Sprintf("echo '%s %s' > /etc/pgbouncer/userlist.txt", c.Bouncer.User, c.Bouncer.Password)},
 	})
 	if err != nil {
 		return err
