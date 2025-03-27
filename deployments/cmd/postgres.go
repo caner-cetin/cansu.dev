@@ -207,6 +207,8 @@ GRANT EXECUTE ON FUNCTION public.lookup(name) TO %s;
 	if err != nil {
 		return err
 	}
+	cancel := app.spawnLogs(response.ID)
+	defer cancel()
 	if err := app.waitForContainerHealthWithConfig(response.ID, postgres_healthcheck); err != nil {
 		return fmt.Errorf("start of primary postgres failed: %w", err)
 	}
@@ -263,10 +265,13 @@ func (c *postgresCredentials) startReplica(app *AppCtx, networks map[string]*net
 	if err != nil {
 		return err
 	}
+	
 	err = app.Docker.ContainerStart(app.Context, response.ID, container.StartOptions{})
 	if err != nil {
 		return err
 	}
+	cancel := app.spawnLogs(response.ID)
+	defer cancel()
 	if err := app.waitForContainerHealthWithConfig(response.ID, postgres_healthcheck); err != nil {
 		return fmt.Errorf("start of replica postgres failed: %w", err)
 	}
