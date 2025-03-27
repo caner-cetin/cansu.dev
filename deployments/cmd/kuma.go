@@ -1,14 +1,11 @@
 package cmd
 
 import (
-	"time"
-
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/api/types/filters"
 	"github.com/docker/docker/api/types/mount"
 	"github.com/docker/docker/api/types/network"
 	"github.com/docker/go-connections/nat"
-	v1 "github.com/moby/docker-image-spec/specs-go/v1"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 )
@@ -47,7 +44,6 @@ func kumaUp(cmd *cobra.Command, args []string) {
 			ExposedPorts: nat.PortSet{
 				nat.Port("3001/tcp"): struct{}{},
 			},
-			Healthcheck: kuma_healthcheck,
 		},
 		&container.HostConfig{
 			RestartPolicy: container.RestartPolicy{Name: container.RestartPolicyAlways},
@@ -55,7 +51,7 @@ func kumaUp(cmd *cobra.Command, args []string) {
 			Mounts: []mount.Mount{
 				{
 					Type:   mount.TypeVolume,
-					Source: "kuma_data",
+					Source: "kuma_kuma_data",
 					Target: "/app/data",
 				},
 			},
@@ -78,13 +74,7 @@ func kumaUp(cmd *cobra.Command, args []string) {
 		return
 	}
 	go app.spawnLogs(resp.ID)
-	app.Spinner.Prefix = "waiting for healthcheck"
-	if err := app.waitForContainerHealthWithConfig(resp.ID, kuma_healthcheck); err != nil {
-		app.Spinner.Stop()
-		log.Error().Err(err).Send()
-		return
-	}
-
+	app.Spinner.Stop()
 }
 
 func kumaDown(cmd *cobra.Command, args []string) {
@@ -99,14 +89,4 @@ func kumaDown(cmd *cobra.Command, args []string) {
 		log.Error().Err(err).Send()
 		return
 	}
-}
-
-// https://github.com/louislam/uptime-kuma/issues/4831#issuecomment-2153149824
-// idk why it takes so long..
-var kuma_healthcheck = &v1.HealthcheckConfig{
-	Test:        []string{"extra/healthcheck"},
-	Interval:    60 * time.Second,
-	Timeout:     30 * time.Second,
-	StartPeriod: 180 * time.Second,
-	Retries:     5,
 }
