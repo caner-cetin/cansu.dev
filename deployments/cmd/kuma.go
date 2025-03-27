@@ -107,6 +107,6 @@ var kuma_healthcheck = &v1.HealthcheckConfig{
 	Test:        []string{"extra/healthcheck"},
 	Interval:    60 * time.Second,
 	Timeout:     30 * time.Second,
-	StartPeriod: 180,
+	StartPeriod: 180 * time.Second,
 	Retries:     5,
 }
