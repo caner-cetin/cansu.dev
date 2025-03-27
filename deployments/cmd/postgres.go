@@ -297,8 +297,6 @@ func (c *postgresCredentials) startBouncer(app *AppCtx, networks map[string]*net
 			Env: []string{
 				"DB_HOST=cansu.dev-pg-primary",
 				"DB_PORT=5432",
-				"DB_USER=" + c.Bouncer.User,
-				"DB_PASSWORD=" + c.Bouncer.Password,
 				"AUTH_USER=" + c.Bouncer.User,
 				"AUTH_FILE=/etc/pgbouncer/userlist.txt",
 				"AUTH_TYPE=scram-sha-256",
