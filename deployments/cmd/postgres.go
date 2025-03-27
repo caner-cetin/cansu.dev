@@ -158,7 +158,7 @@ GRANT EXECUTE ON FUNCTION public.lookup(name) TO %s;
 			AttachStdin:  false,
 
 			OpenStdin: false,
-			Image:     "postgres:16",
+			Image:     "postgres:17",
 			Cmd: []string{
 				"-c",
 				"wal_level=replica",
@@ -230,7 +230,7 @@ func (c *postgresCredentials) startReplica(app *AppCtx, networks map[string]*net
 			AttachStderr: true,
 			AttachStdin:  false,
 			OpenStdin:    false,
-			Image:        "postgres:16",
+			Image:        "postgres:17",
 			Cmd: []string{
 				"-c",
 				"wal_level=replica",
