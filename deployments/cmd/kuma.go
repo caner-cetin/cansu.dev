@@ -77,6 +77,7 @@ func kumaUp(cmd *cobra.Command, args []string) {
 		log.Error().Err(err).Send()
 		return
 	}
+	go app.spawnLogs(resp.ID)
 	app.Spinner.Prefix = "waiting for healthcheck"
 	if err := app.waitForContainerHealthWithConfig(resp.ID, kuma_healthcheck); err != nil {
 		app.Spinner.Stop()
@@ -100,9 +101,12 @@ func kumaDown(cmd *cobra.Command, args []string) {
 	}
 }
 
+// https://github.com/louislam/uptime-kuma/issues/4831#issuecomment-2153149824
+// idk why it takes so long..
 var kuma_healthcheck = &v1.HealthcheckConfig{
-	Test:     []string{"extra/healthcheck"},
-	Interval: 10 * time.Second,
-	Timeout:  5 * time.Second,
-	Retries:  10,
+	Test:        []string{"extra/healthcheck"},
+	Interval:    60 * time.Second,
+	Timeout:     30 * time.Second,
+	StartPeriod: 180,
+	Retries:     5,
 }
