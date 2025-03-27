@@ -50,6 +50,6 @@ func initConfig() {
 		log.Error().Err(err).Send()
 		return
 	}
-	toml.Unmarshal(contents, cfg)
 	cfg.SetDefaults()
+	toml.Unmarshal(contents, cfg)
 }
