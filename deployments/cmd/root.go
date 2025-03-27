@@ -33,6 +33,7 @@ func init() {
 	rootCmd.Flags().StringVar(&cfgPath, "config", "", "toml path (default $HOME/.oblivion.toml)")
 	rootCmd.AddCommand(getPostgresCmd())
 	rootCmd.AddCommand(getVersionCmd())
+	rootCmd.AddCommand(getKumaCmd())
 }
 
 func initConfig() {
@@ -50,4 +51,5 @@ func initConfig() {
 		return
 	}
 	toml.Unmarshal(contents, cfg)
+	cfg.SetDefaults()
 }

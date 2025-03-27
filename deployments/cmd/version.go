@@ -10,7 +10,7 @@ import (
 var (
 	versionCmd = &cobra.Command{
 		Use: "version",
-		Run: WrapCommandWithResources(version, []ResourceType{ResourceDocker}),
+		Run: WrapCommandWithResources(version, ResourceConfig{Resources: []ResourceType{ResourceDocker}}),
 	}
 )
 
@@ -21,5 +21,5 @@ func getVersionCmd() *cobra.Command {
 func version(cmd *cobra.Command, args []string) {
 	app := GetApp(cmd)
 	fmt.Printf("Oblivion %s \n", internal.Version)
-	fmt.Printf("Docker API %s \n", app.Docker.ClientVersion())
+	fmt.Printf("Docker API %s \n", app.Docker.Client.ClientVersion())
 }

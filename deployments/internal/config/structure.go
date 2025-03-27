@@ -13,6 +13,7 @@ type DockerConfig struct {
 
 type NetworkConfig struct {
 	DatabaseNetworkName string `toml:"database_network_name"`
+	UptimeNetworkName   string `toml:"uptime_network_name"`
 }
 
 type OnepasswordConfig struct {

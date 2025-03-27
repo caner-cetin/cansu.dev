@@ -19,17 +19,17 @@ func (a *AppCtx) waitForContainerHealthWithConfig(containerID string, healthConf
 		return fmt.Errorf("health config is nil")
 	}
 	startTime := time.Now()
-	for range healthConfig.Retries {
-		inspect, err := a.Docker.ContainerInspect(a.Context, containerID)
+	a.Spinner.Prefix = "polling for health"
+	for i := range healthConfig.Retries {
+		a.Spinner.Prefix = fmt.Sprintf("polling for health, retry %d", i + 1)
+		inspect, err := a.Docker.Client.ContainerInspect(a.Context, containerID)
 		if err != nil {
 			return err
 		}
-
 		if inspect.State != nil && inspect.State.Health != nil && inspect.State.Health.Status == types.Healthy {
 			log.Info().Msg("container is healthy")
 			return nil
 		}
-
 		if time.Since(startTime) > healthConfig.Interval*time.Duration(healthConfig.Retries) {
 			return fmt.Errorf("timeout waiting for container to become healthy")
 		}
@@ -42,12 +42,12 @@ func (a *AppCtx) waitForContainerHealthWithConfig(containerID string, healthConf
 
 func (a *AppCtx) readLogs(ctx context.Context, containerID string) {
 	logger := log.With().Str("container_id", containerID).Logger()
-	container_info, err := a.Docker.ContainerInspect(ctx, containerID)
+	container_info, err := a.Docker.Client.ContainerInspect(ctx, containerID)
 	if err != nil {
 		log.Error().Str("id", containerID).Err(err).Msg("failed to inspect container")
 		return
 	}
-	logs, err := a.Docker.ContainerLogs(a.Context, containerID, container.LogsOptions{
+	logs, err := a.Docker.Client.ContainerLogs(a.Context, containerID, container.LogsOptions{
 		ShowStdout: true,
 		ShowStderr: true,
 		Follow:     true,

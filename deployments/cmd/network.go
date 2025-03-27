@@ -8,7 +8,7 @@ import (
 )
 
 func (a *AppCtx) getNetworkIDByName(ctx context.Context, networkName string) (string, error) {
-	networks, err := a.Docker.NetworkList(ctx, network.ListOptions{})
+	networks, err := a.Docker.Client.NetworkList(ctx, network.ListOptions{})
 	if err != nil {
 		return "", err
 	}
@@ -19,5 +19,15 @@ func (a *AppCtx) getNetworkIDByName(ctx context.Context, networkName string) (st
 		}
 	}
 
+
 	return "", fmt.Errorf("network with name '%s' not found", networkName)
+}
+
+
+func (a *AppCtx) getNetworks(networkNames ...string) map[string]*network.EndpointSettings {
+	es := make(map[string]*network.EndpointSettings)
+	for _, nw := range networkNames {
+		es[nw] = a.Docker.Networks[nw]
+	}
+	return es
 }

@@ -32,7 +32,7 @@ type postgresCredentials struct {
 var (
 	postgresUpCmd = &cobra.Command{
 		Use: "up",
-		Run: WrapCommandWithResources(postgresUp, []ResourceType{ResourceDocker, ResourceOnePassword}),
+		Run: WrapCommandWithResources(postgresUp, ResourceConfig{[]ResourceType{ResourceDocker, ResourceOnePassword}, []Network{NetworkDatabase}}),
 	}
 	postgresCmd = &cobra.Command{
 		Use: "postgres",
@@ -52,22 +52,15 @@ func postgresUp(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	network_id, err := app.getNetworkIDByName(cmd.Context(), cfg.Networks.DatabaseNetworkName)
-	if err != nil {
+	if err := credentials.startPrimary(&app); err != nil {
 		log.Error().Err(err).Send()
 		return
 	}
-	network_config := make(map[string]*network.EndpointSettings)
-	network_config[cfg.Networks.DatabaseNetworkName] = &network.EndpointSettings{NetworkID: network_id}
-	if err := credentials.startPrimary(&app, network_config); err != nil {
+	if err := credentials.startReplica(&app); err != nil {
 		log.Error().Err(err).Send()
 		return
 	}
-	if err := credentials.startReplica(&app, network_config); err != nil {
-		log.Error().Err(err).Send()
-		return
-	}
-	if err := credentials.startBouncer(&app, network_config); err != nil {
+	if err := credentials.startBouncer(&app); err != nil {
 		log.Error().Err(err).Send()
 		return
 	}
@@ -119,8 +112,8 @@ func (a *AppCtx) loadPostgresSecrets() (*postgresCredentials, error) {
 	return &credentials, nil
 }
 
-func (c *postgresCredentials) startPrimary(app *AppCtx, networks map[string]*network.EndpointSettings) error {
-	containers, err := app.Docker.ContainerList(app.Context, container.ListOptions{Filters: filters.NewArgs(filters.KeyValuePair{Key: "name", Value: "pg-primary"})})
+func (c *postgresCredentials) startPrimary(app *AppCtx) error {
+	containers, err := app.Docker.Client.ContainerList(app.Context, container.ListOptions{Filters: filters.NewArgs(filters.KeyValuePair{Key: "name", Value: "pg-primary"})})
 	if err != nil {
 		return err
 	}
@@ -151,7 +144,7 @@ GRANT EXECUTE ON FUNCTION public.lookup(name) TO %s;
 	defer temp_bouncer_init_sql.Close()
 	defer os.Remove(temp_bouncer_init_sql.Name())
 	io.Copy(temp_bouncer_init_sql, strings.NewReader(bouncer_init_sql))
-	response, err := app.Docker.ContainerCreate(app.Context,
+	response, err := app.Docker.Client.ContainerCreate(app.Context,
 		&container.Config{
 			AttachStdout: true,
 			AttachStderr: true,
@@ -195,7 +188,7 @@ GRANT EXECUTE ON FUNCTION public.lookup(name) TO %s;
 			},
 		},
 		&network.NetworkingConfig{
-			EndpointsConfig: networks,
+			EndpointsConfig: app.getNetworks(cfg.Networks.DatabaseNetworkName),
 		},
 		nil,
 		"cansu.dev-pg-primary")
@@ -203,7 +196,7 @@ GRANT EXECUTE ON FUNCTION public.lookup(name) TO %s;
 		return err
 	}
 	log.Info().Str("id", response.ID).Msg("created primary postgres container")
-	err = app.Docker.ContainerStart(app.Context, response.ID, container.StartOptions{})
+	err = app.Docker.Client.ContainerStart(app.Context, response.ID, container.StartOptions{})
 	if err != nil {
 		return err
 	}
@@ -215,8 +208,8 @@ GRANT EXECUTE ON FUNCTION public.lookup(name) TO %s;
 	return nil
 }
 
-func (c *postgresCredentials) startReplica(app *AppCtx, networks map[string]*network.EndpointSettings) error {
-	containers, err := app.Docker.ContainerList(app.Context, container.ListOptions{Filters: filters.NewArgs(filters.KeyValuePair{Key: "name", Value: "pg-replica"})})
+func (c *postgresCredentials) startReplica(app *AppCtx) error {
+	containers, err := app.Docker.Client.ContainerList(app.Context, container.ListOptions{Filters: filters.NewArgs(filters.KeyValuePair{Key: "name", Value: "pg-replica"})})
 	if err != nil {
 		return err
 	}
@@ -224,7 +217,7 @@ func (c *postgresCredentials) startReplica(app *AppCtx, networks map[string]*net
 		log.Info().Msg("primary pg replica running")
 		return nil
 	}
-	response, err := app.Docker.ContainerCreate(app.Context,
+	response, err := app.Docker.Client.ContainerCreate(app.Context,
 		&container.Config{
 			AttachStdout: true,
 			AttachStderr: true,
@@ -258,7 +251,7 @@ func (c *postgresCredentials) startReplica(app *AppCtx, networks map[string]*net
 			},
 		},
 		&network.NetworkingConfig{
-			EndpointsConfig: networks,
+			EndpointsConfig: app.getNetworks(cfg.Networks.DatabaseNetworkName),
 		},
 		nil,
 		"cansu.dev-pg-replica")
@@ -266,7 +259,7 @@ func (c *postgresCredentials) startReplica(app *AppCtx, networks map[string]*net
 		return err
 	}
 
-	err = app.Docker.ContainerStart(app.Context, response.ID, container.StartOptions{})
+	err = app.Docker.Client.ContainerStart(app.Context, response.ID, container.StartOptions{})
 	if err != nil {
 		return err
 	}
@@ -278,8 +271,8 @@ func (c *postgresCredentials) startReplica(app *AppCtx, networks map[string]*net
 	return nil
 }
 
-func (c *postgresCredentials) startBouncer(app *AppCtx, networks map[string]*network.EndpointSettings) error {
-	containers, err := app.Docker.ContainerList(app.Context, container.ListOptions{
+func (c *postgresCredentials) startBouncer(app *AppCtx) error {
+	containers, err := app.Docker.Client.ContainerList(app.Context, container.ListOptions{
 		Filters: filters.NewArgs(filters.KeyValuePair{Key: "name", Value: "pg-bouncer"}),
 	})
 	if err != nil {
@@ -289,7 +282,7 @@ func (c *postgresCredentials) startBouncer(app *AppCtx, networks map[string]*net
 		log.Info().Msg("pgbouncer container running")
 		return nil
 	}
-	response, err := app.Docker.ContainerCreate(app.Context,
+	response, err := app.Docker.Client.ContainerCreate(app.Context,
 		&container.Config{
 			AttachStdout: true,
 			AttachStderr: true,
@@ -323,7 +316,7 @@ func (c *postgresCredentials) startBouncer(app *AppCtx, networks map[string]*net
 			},
 		},
 		&network.NetworkingConfig{
-			EndpointsConfig: networks,
+			EndpointsConfig: app.getNetworks(cfg.Networks.DatabaseNetworkName),
 		},
 		nil,
 		"cansu.dev-pg-bouncer",
@@ -331,17 +324,17 @@ func (c *postgresCredentials) startBouncer(app *AppCtx, networks map[string]*net
 	if err != nil {
 		return err
 	}
-	err = app.Docker.ContainerStart(app.Context, response.ID, container.StartOptions{})
+	err = app.Docker.Client.ContainerStart(app.Context, response.ID, container.StartOptions{})
 	if err != nil {
 		return err
 	}
-	save_user_list, err := app.Docker.ContainerExecCreate(app.Context, response.ID, container.ExecOptions{
+	save_user_list, err := app.Docker.Client.ContainerExecCreate(app.Context, response.ID, container.ExecOptions{
 		Cmd: []string{"/bin/sh", "-c", fmt.Sprintf("echo '%s %s' > /etc/pgbouncer/userlist.txt", c.Bouncer.User, c.Bouncer.Password)},
 	})
 	if err != nil {
 		return err
 	}
-	err = app.Docker.ContainerExecStart(app.Context, save_user_list.ID, container.ExecStartOptions{})
+	err = app.Docker.Client.ContainerExecStart(app.Context, save_user_list.ID, container.ExecStartOptions{})
 	if err != nil {
 		return err
 	}
