@@ -1,9 +1,0 @@
-[docker]
-socket = "unix:///var/run/docker.sock"
-[postgres]
-db = "postgres"
-[networks]
-database_network_name = "database_bridge"
-uptime_network_name = "uptime_bridge"
-[onepass]
-vault_name = "Server"
