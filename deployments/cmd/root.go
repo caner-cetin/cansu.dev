@@ -34,6 +34,7 @@ func init() {
 	rootCmd.AddCommand(getPostgresCmd())
 	rootCmd.AddCommand(getVersionCmd())
 	rootCmd.AddCommand(getKumaCmd())
+	rootCmd.AddCommand(getStaticCmd())
 }
 
 func initConfig() {

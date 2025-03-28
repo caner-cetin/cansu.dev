@@ -56,6 +56,7 @@ RUN rm -rf /tmp/nginx-1.25.3 /tmp/ngx-fancyindex-0.5.2 \
   && rm /tmp/nginx-1.25.3.tar.gz /tmp/v0.5.2.tar.gz
 
 COPY nginx.conf /etc/nginx/nginx.conf
+COPY ./fancyindex /var/www/servers/cansu.dev/static/fancyindex
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
