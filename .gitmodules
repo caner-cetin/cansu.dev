@@ -16,9 +16,6 @@
 [submodule "main"]
 	path = main
 	url = https://github.com/caner-cetin/cansu-dev-main.git
-[submodule "snippets"]
-	path = snippets
-	url = https://github.com/caner-cetin/snippets-cansu-dev.git
 [submodule "oblivion"]
 	path = oblivion
 	url = https://github.com/caner-cetin/oblivion.git
